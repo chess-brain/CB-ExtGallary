@@ -19,43 +19,43 @@ import Blockly from 'blockly/core';
 
 // Custom block translations fallback (in case Blockly.Msg is cleared during HMR)
 const customBlockTranslations = {
-    BKY_EVENTS_LOADED: 'when extension loaded %1',
-    BKY_EVENTS_THREAD: 'new thread %1',
-    BKY_EVENTS_REGBROADCAST: 'when %1 broadcasted %2',
-    BKY_EVENTS_BROADCAST: 'broadcast %1',
-    BKY_EVENTS_BROADCASTW: 'broadcast %1 and wait',
-    BKY_RUNTIME_START: 'start project',
-    BKY_RUNTIME_STOP: 'stop project',
-    BKY_RUNTIME_RUNNING: 'project running?',
-    BKY_RUNTIME_ONSTART: 'when project started %1 %2',
-    BKY_RUNTIME_ONSTOP: 'when project stopped %1 %2',
-    BKY_RUNTIME_BEFORETICK: 'before project tick %1 %2',
-    BKY_RUNTIME_AFTERTICK: 'after project tick %1 %2',
-    BKY_RUNTIME_TURBOGET: 'turbo mode enabled?',
-    BKY_RUNTIME_TURBOSET: 'set turbo mode to %1',
-    BKY_RUNTIME_FRAMEGET: 'frame rate',
-    BKY_RUNTIME_FRAMESET: 'set frame rate to %1',
-    BKY_RUNTIME_TIMER: 'project timer',
-    BKY_RUNTIME_BROADCAST: 'broadcast project %1',
-    BKY_CONTROL_IF: 'if %1 then %2 %3',
-    BKY_CONTROL_ELSEIF: 'else if',
-    BKY_CONTROL_ELSE: 'else',
-    BKY_CONTROL_WAIT: 'wait %1 seconds',
-    BKY_CONTROL_WAITFRAME: 'wait until next frame',
-    BKY_CONTROL_WAITUNTIL: 'wait until %1',
-    BKY_CONTROL_WHILE: 'while %1 do %2 %3',
-    BKY_CONTROL_REPEAT: 'repeat %1 times %2 %3',
-    BKY_CONTROL_RETURN: 'return %1',
-    BKY_CONTROL_INLINE: 'inline %1 %2',
-    BKY_ADVANCED_RANDOM: 'random number from %1 to %2',
-    BKY_ADVANCED_POWER: '%1 to the power of %2',
-    BKY_ADVANCED_LENGTH: 'length of %1',
-    BKY_ADVANCED_CONCAT: 'join %1 and %2',
-    BKY_ADVANCED_ARRAYLENGTH: 'length of %1',
-    BKY_ADVANCED_ARRAYPUSH: 'add %1 to %2',
-    BKY_ADVANCED_DATETIME: 'current date and time',
-    BKY_ADVANCED_YEAR: 'year of %1',
-    BKY_GENERIC_RETURN: 'return %1'
+    EVENTS_LOADED: 'when extension loads %1',
+    EVENTS_THREAD: 'run in new thread %1',
+    EVENTS_REGBROADCAST: 'when broadcast %1 received %2',
+    EVENTS_BROADCAST: 'broadcast %1',
+    EVENTS_BROADCASTW: 'broadcast %1 and wait',
+    RUNTIME_START: 'start project',
+    RUNTIME_STOP: 'stop project',
+    RUNTIME_RUNNING: 'project running?',
+    RUNTIME_ONSTART: 'when project started %1 %2',
+    RUNTIME_ONSTOP: 'when project stopped %1 %2',
+    RUNTIME_BEFORETICK: 'before project tick %1 %2',
+    RUNTIME_AFTERTICK: 'after project tick %1 %2',
+    RUNTIME_TURBOGET: 'turbo mode enabled?',
+    RUNTIME_TURBOSET: 'set turbo mode to %1',
+    RUNTIME_FRAMEGET: 'frame rate',
+    RUNTIME_FRAMESET: 'set frame rate to %1',
+    RUNTIME_TIMER: 'project timer',
+    RUNTIME_BROADCAST: 'broadcast project %1',
+    CONTROL_IF: 'if %1 then %2 %3',
+    CONTROL_ELSEIF: 'else if',
+    CONTROL_ELSE: 'else',
+    CONTROL_WAIT: 'wait %1 seconds',
+    CONTROL_WAITFRAME: 'wait until next frame',
+    CONTROL_WAITUNTIL: 'wait until %1',
+    CONTROL_WHILE: 'while %1 do %2 %3',
+    CONTROL_REPEAT: 'repeat %1 times %2 %3',
+    CONTROL_RETURN: 'return %1',
+    CONTROL_INLINE: 'inline %1 %2',
+    ADVANCED_RANDOM: 'random number from %1 to %2',
+    ADVANCED_POWER: '%1 to the power of %2',
+    ADVANCED_LENGTH: 'length of %1',
+    ADVANCED_CONCAT: 'join %1 and %2',
+    ADVANCED_ARRAYLENGTH: 'length of %1',
+    ADVANCED_ARRAYPUSH: 'add %1 to %2',
+    ADVANCED_DATETIME: 'current date and time',
+    ADVANCED_YEAR: 'year of %1',
+    GENERIC_RETURN: 'return %1'
 };
 
 // Ensure custom translations exist in Blockly.Msg (HMR protection)
@@ -79,11 +79,11 @@ export default () => {
     console.log('[BLOCKS INDEX] ensureCustomTranslations called');
     ensureCustomTranslations();
     
-    console.log('[BLOCKS INDEX] Before registerGeneric, BKY_EVENTS_LOADED =', Blockly.Msg.BKY_EVENTS_LOADED);
+    console.log('[BLOCKS INDEX] Before registerGeneric, EVENTS_LOADED =', Blockly.Msg.EVENTS_LOADED);
     registerGeneric();
     console.log('[BLOCKS INDEX] After registerGeneric');
     
-    console.log('[BLOCKS INDEX] Before registerEvents, BKY_EVENTS_LOADED =', Blockly.Msg.BKY_EVENTS_LOADED);
+    console.log('[BLOCKS INDEX] Before registerEvents, EVENTS_LOADED =', Blockly.Msg.EVENTS_LOADED);
     registerEvents();
     console.log('[BLOCKS INDEX] After registerEvents');
     

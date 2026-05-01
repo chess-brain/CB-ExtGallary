@@ -13,7 +13,7 @@ function register() {
                 "name": "BLOCKS"
             }
         ],
-        inputsInline: true,
+        inputsInline: false,
         colour: categoryColor
     }, (block) => {
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
@@ -31,7 +31,7 @@ function register() {
         ],
         previousStatement: null,
         nextStatement: null,
-        inputsInline: true,
+        inputsInline: false,
         colour: categoryColor
     }, (block) => {
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
@@ -55,7 +55,7 @@ function register() {
                 "name": "BLOCKS"
             }
         ],
-        inputsInline: true,
+        inputsInline: false,
         order: 2,
         colour: categoryColor
     }, (block) => {

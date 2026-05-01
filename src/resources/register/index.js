@@ -12,7 +12,7 @@ export function registerBlock(blockName, jsonData, compileFunction) {
     if (blockName === 'events_loaded') {
         console.log('[REGISTER BLOCK] Before jsonInit for events_loaded:');
         console.log('  jsonData.message0:', jsonData.message0);
-        console.log('  Blockly.Msg.BKY_EVENTS_LOADED:', Blockly.Msg.BKY_EVENTS_LOADED);
+        console.log('  Blockly.Msg.EVENTS_LOADED:', Blockly.Msg.EVENTS_LOADED);
         console.log('  Blockly object identity:', Object.keys(Blockly).slice(0, 5));
     }
 
