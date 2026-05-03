@@ -7,6 +7,27 @@
     import { createEventDispatcher } from "svelte";
     import Blockly from "blockly/core";
     import registerDynamicCategories from "../../resources/categories";
+    import * as i18n from "../../i18n";
+
+    /** toolboxCat.* keys — icon lookup works for any translated category label */
+    const TOOLBOX_ICON_KEYS = [
+        "events",
+        "control",
+        "math",
+        "strings",
+        "vectors",
+        "inputs",
+        "variables",
+        "lists",
+        "lambdas",
+        "blocks",
+        "runtime",
+        "targets",
+        "browser",
+        "music",
+        "search",
+        "favorites",
+    ];
     import iconBlocks from "$lib/images/blockicon/blocks.svg";
     import iconBrowser from "$lib/images/blockicon/browser.svg";
     import iconControl from "$lib/images/blockicon/control.svg";
@@ -50,12 +71,25 @@
         return (name || "").toLowerCase().replace(/\s+/g, "");
     }
 
+    function iconForToolboxCategoryLabel(labelText) {
+        const n = normalizeCategoryName(labelText);
+        if (!n) {
+            return undefined;
+        }
+        for (const key of TOOLBOX_ICON_KEYS) {
+            const translated = i18n.t(`toolboxCat.${key}`);
+            if (normalizeCategoryName(translated) === n) {
+                return categoryIcons[key];
+            }
+        }
+        return categoryIcons[n];
+    }
+
     function applyCategoryIcons(root) {
         const categories = root.querySelectorAll(".blocklyToolboxCategory");
         for (const category of categories) {
             const label = category.querySelector(".blocklyTreeLabel")?.textContent;
-            const key = normalizeCategoryName(label);
-            const icon = categoryIcons[key];
+            const icon = iconForToolboxCategoryLabel(label);
 
             if (icon) {
                 category.style.setProperty("--category-icon", `url(\"${icon}\")`);
@@ -72,8 +106,16 @@
         Blockly.setLocale(msg);
         workspace = Blockly.inject(rootElement, {
             ...config,
-            toolbox:
-                config.toolbox ? '<xml><category name="Loading..." colour="100"></category></xml>' : null,
+            toolbox: config.toolbox
+                ? (() => {
+                      const raw = String(i18n.t('blockly.loadingToolbox'));
+                      const safe = raw
+                          .replace(/&/g, '&amp;')
+                          .replace(/"/g, '&quot;')
+                          .replace(/</g, '&lt;');
+                      return `<xml><category name="${safe}" colour="100"></category></xml>`;
+                  })()
+                : null,
             rtl,
         });
         registerDynamicCategories(workspace);
@@ -83,9 +125,17 @@
         if (dom !== null) {
             try {
                 // don't record this reloading of the workspace for undo
-                Blockly.Events.recordUndo = false;
+                if (typeof Blockly.Events.setRecordUndo === 'function') {
+                    Blockly.Events.setRecordUndo(false);
+                } else {
+                    Blockly.Events.recordUndo = false;
+                }
                 Blockly.Xml.clearWorkspaceAndLoadFromXml(dom, workspace);
-                Blockly.Events.recordUndo = true;
+                if (typeof Blockly.Events.setRecordUndo === 'function') {
+                    Blockly.Events.setRecordUndo(true);
+                } else {
+                    Blockly.Events.recordUndo = true;
+                }
             } catch (ex) {
                 console.warn(ex);
             }

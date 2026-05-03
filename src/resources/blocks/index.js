@@ -19,8 +19,12 @@ import Blockly from 'blockly/core';
 
 // Custom block translations fallback (in case Blockly.Msg is cleared during HMR)
 const customBlockTranslations = {
-    EVENTS_LOADED: 'when extension loads %1',
-    EVENTS_THREAD: 'run in new thread %1',
+    BLOCKS_DEFINE_TOOLTIP: 'Define a custom block implementation.',
+    BLOCKS_EXECUTE_TOOLTIP: 'Run a custom block.',
+    BLOCKS_CUSTOM_MISSING: '(custom block)',
+    BLOCKS_RETURN: 'return %1',
+    EVENTS_LOADED: 'when extension loads',
+    EVENTS_THREAD: 'run in new thread',
     EVENTS_REGBROADCAST: 'when broadcast %1 received %2',
     EVENTS_BROADCAST: 'broadcast %1',
     EVENTS_BROADCASTW: 'broadcast %1 and wait',

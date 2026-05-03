@@ -1,9 +1,10 @@
 import javascriptGenerator from '../javascriptGenerator';
 import util from '../util';
+import * as i18n from '../../i18n';
 
 const start = `
 if (!Scratch.extensions.unsandboxed) {
-    alert("This extension needs to be unsandboxed to run!")
+    alert(${JSON.stringify(i18n.t('compiler.unsandboxedRequired'))})
     return
 }
 
@@ -188,6 +189,9 @@ class Compiler {
      * @returns {string} Generated code.
      */
     compile(workspace, properties) {
+        if (!workspace || typeof workspace.getVariableMap !== 'function') {
+            return '';
+        }
         const code = javascriptGenerator.workspaceToCode(workspace);
 
         const headerCode = [

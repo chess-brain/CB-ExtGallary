@@ -19,7 +19,7 @@
     }
 
     function validateName() {
-        if (properties.name == "") properties.name = "Extension"
+        if (properties.name == "") properties.name = t('properties.defaultExtensionName')
         if (properties.name.length > 20) properties.name = properties.name.substring(0, 20)
         properties.name = properties.name.replace("\n", " ")
         update()
@@ -33,7 +33,7 @@
             <span class="name" contenteditable="plaintext-only" bind:innerText={properties.name} on:blur={validateName}></span>
         </div>
         <div class="vert equal">
-            <span>{t('properties.id')}: <input type="text" placeholder="extensionID" maxlength="20" bind:value={properties.id} on:blur={update}></span>
+            <span>{t('properties.id')}: <input type="text" placeholder={t('properties.defaultId')} maxlength="20" bind:value={properties.id} on:blur={update}></span>
             <span>{t('properties.color')}: <input type="color" bind:value={properties.color} on:blur={update}></span>
         </div>
     </div>

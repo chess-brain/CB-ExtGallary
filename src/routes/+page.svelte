@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import '../resources/blockly-en-first.js';
   import Blockly from "blockly/core";
 
   // Import official Blockly language packs
@@ -20,7 +21,7 @@
   import Patches from "../patches";
   import registerCategories from "../resources/categories";
 
-  import Toolbox from "$lib/Toolbox/Toolbox.xml?raw";
+  import TOOLBOX_XML from "$lib/Toolbox/Toolbox.xml?raw";
 
   import BlocklyComponent from "$lib/svelte-blockly";
   import { onMount } from "svelte";
@@ -83,27 +84,57 @@
     },
   };
 
-  const config = {
-    toolbox: Toolbox,
-    collapse: true,
-    comments: true,
-    scrollbars: true,
-    renderer: "custom_renderer",
-    zoom: {
-      controls: true,
-      wheel: true,
-      startScale: 0.8,
-      maxScale: 2,
-      minScale: 0.5,
-      scaleSpeed: 1.1,
-    },
-    sounds: false, // Disable sounds to prevent loading from blockly-demo.appspot.com
-    plugins: {
-      toolbox: ContinuousToolboxPlugin.ContinuousToolbox,
-      flyoutsVerticalToolbox: ContinuousToolboxPlugin.ContinuousFlyout,
-      metricsManager: ContinuousToolboxPlugin.ContinuousMetrics,
-    },
+  const BLOCKLY_ZOOM = {
+    controls: true,
+    wheel: true,
+    startScale: 0.8,
+    maxScale: 2,
+    minScale: 0.5,
+    scaleSpeed: 1.1,
   };
+
+  const BLOCKLY_PLUGINS = {
+    toolbox: ContinuousToolboxPlugin.ContinuousToolbox,
+    flyoutsVerticalToolbox: ContinuousToolboxPlugin.ContinuousFlyout,
+    metricsManager: ContinuousToolboxPlugin.ContinuousMetrics,
+  };
+
+  /** Localize static toolbox XML category names (Blockly uses name= as label). */
+  function localizeToolboxXml() {
+    const pairs = /** @type {const} */ ([
+      ['Events', 'toolboxCat.events'],
+      ['Control', 'toolboxCat.control'],
+      ['Math', 'toolboxCat.math'],
+      ['Strings', 'toolboxCat.strings'],
+      ['Vectors', 'toolboxCat.vectors'],
+      ['Inputs', 'toolboxCat.inputs'],
+      ['Variables', 'toolboxCat.variables'],
+      ['Lists', 'toolboxCat.lists'],
+      ['Lambdas', 'toolboxCat.lambdas'],
+      ['Blocks', 'toolboxCat.blocks'],
+      ['Runtime', 'toolboxCat.runtime'],
+      ['Targets', 'toolboxCat.targets'],
+      ['Browser', 'toolboxCat.browser'],
+      ['Music', 'toolboxCat.music'],
+    ]);
+    let xml = TOOLBOX_XML;
+    for (const [en, key] of pairs) {
+      xml = xml.split(`name="${en}"`).join(`name="${t(key)}"`);
+    }
+    return xml;
+  }
+
+  $: blocklyWorkspaceConfig = (currentLanguage,
+    {
+      toolbox: localizeToolboxXml(),
+      collapse: true,
+      comments: true,
+      scrollbars: true,
+      renderer: 'custom_renderer',
+      zoom: BLOCKLY_ZOOM,
+      sounds: false,
+      plugins: BLOCKLY_PLUGINS,
+    });
 
   let localConfig = {
     dark: false,
@@ -117,7 +148,7 @@
     }
   }
 
-  Patches.Blockly.ToolboxFlyout(Blockly, config);
+  Patches.Blockly.ToolboxFlyout(Blockly, { zoom: BLOCKLY_ZOOM });
   Patches.Blockly.Renderer(Blockly);
   Patches.Blockly.DuplicateDrag(Blockly);
   
@@ -153,6 +184,14 @@
   /** @type {import('blockly').Workspace} */
   let activeTab = 0;
   let workspace;
+
+  /** Flyout/toolbox button callbacks are stored on the workspace; re-register after inject/dispose (e.g. locale refresh). */
+  let workspaceFlyoutCallbacksBound = null;
+  $: if (browser && workspace && workspace !== workspaceFlyoutCallbacksBound) {
+    workspaceFlyoutCallbacksBound = workspace;
+    registerCategories(workspace);
+    registerButtons(workspace);
+  }
   let availableLanguages = [];
   let showLanguageMenu = false;
   let currentLanguage = getLanguage();
@@ -181,6 +220,15 @@
   };
 
   function updateGeneratedCode() {
+    if (!workspace || typeof workspace.getVariableMap !== 'function') {
+      code = '';
+      if (typeof window !== 'undefined') {
+        // @ts-ignore
+        window.code = '';
+      }
+      debuggerExtensionUri = getExtensionUri();
+      return;
+    }
     code = compiler.compile(workspace, properties);
     // @ts-ignore - Adding custom property to window
     window.code = code;
@@ -226,7 +274,7 @@
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error('Error exporting EXF:', e);
-      alert('Failed to export EXF file.');
+      alert(t('messages.failedToExportEXF'));
     }
   }
 
@@ -311,7 +359,7 @@
       localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
       lastAutoSaveAt = new Date(payload.updatedAt).toLocaleString();
       if (!silent) {
-        alert("Draft saved.");
+        alert(t('messages.draftSaved'));
       }
     } catch {}
   }
@@ -320,14 +368,14 @@
     try {
       const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
       if (!raw) {
-        if (!silent) alert("No draft found.");
+        if (!silent) alert(t('messages.noDraftFound'));
         return;
       }
       const payload = JSON.parse(raw);
       applyProjectData(payload.data || {});
       lastAutoSaveAt = payload.updatedAt ? new Date(payload.updatedAt).toLocaleString() : "";
     } catch {
-      if (!silent) alert("Draft restore failed.");
+      if (!silent) alert(t('messages.draftRestoreFailed'));
     }
   }
 
@@ -349,11 +397,7 @@
 
     // zip
     const zip = new JSZip();
-    zip.file(
-      "README.txt",
-      "This file is not meant to be opened!" +
-        "\nBe careful as you can permanently break your extension!",
-    );
+    zip.file(t('messages.exportReadmeTitle'), t('messages.exportReadmeBody'));
 
     // data
     const data = zip.folder("data");
@@ -399,7 +443,7 @@
     if (blocks.length > 0) {
       focusBlock(blocks[0]);
     } else if (!silent) {
-      alert("No blocks matched this query.");
+      alert(t('messages.searchNoResults'));
     }
   }
 
@@ -419,7 +463,7 @@
           const dataFolder = zip.folder("data");
           const projectFile = dataFolder?.file("project.json");
           if (!projectFile) {
-            throw new Error("Missing data/project.json");
+            throw new Error(t('messages.importMissingProjectJson'));
           }
           const projectJsonString = await projectFile.async("string");
           const projectJson = JSON.parse(projectJsonString);
@@ -427,7 +471,7 @@
           pushRecentFile(file.name);
         })
         .catch((error) => {
-          loadError = `Import failed: ${error?.message || "Unknown error"}`;
+          loadError = `${t('messages.importFailedPrefix')} ${error?.message || t('messages.unknownError')}`;
           alert(loadError);
         });
     });
@@ -435,7 +479,7 @@
 
   function resetProject() {
     if (!workspace) return;
-    if (!confirm("Reset the current project? This will clear all blocks and custom data.")) {
+    if (!confirm(t('messages.resetConfirm'))) {
       return;
     }
 
@@ -464,6 +508,7 @@
   }
 
   function changeLanguage(langCode) {
+    currentLanguage = langCode;
     setLanguage(langCode);
     updateBlocklyLanguage(langCode);
     showLanguageMenu = false;
@@ -515,6 +560,7 @@
 
     // Initialize language on client-side
     initLanguage();
+    currentLanguage = getLanguage();
     availableLanguages = getAvailableLanguages();
     
     // Set up Blockly messages for user's preferred language
@@ -545,9 +591,6 @@
       currentLanguage = newLang;
       updateBlocklyLanguage(newLang);
     });
-
-    registerCategories(workspace);
-    registerButtons(workspace);
 
     readRecentFiles();
     restoreDraft(true);
@@ -624,7 +667,7 @@
             type="button"
             class="language-item"
             on:click={() => changeLanguage(lang.code)}
-            class:active={lang.code === getLanguage()}
+            class:active={lang.code === currentLanguage}
           >
             {lang.name}
           </button>
@@ -634,10 +677,10 @@
   </div>
   <NavigationDivider />
   <NavigationButton on:click={() => window.open("https://discord.gg/5EZ2Ngreys", '_blank')}>
-    Discord 
+    {t('nav.discord')}
   </NavigationButton>
   <NavigationButton on:click={() => window.open("https://qm.qq.com/q/xWWYbY59Ys", '_blank')}>
-    QQ 
+    {t('nav.qq')}
   </NavigationButton>
   <NavigationDivider />
   <NavigationButton on:click={() => {
@@ -649,7 +692,7 @@
       }
     }
   }}>
-    Settings
+    {t('nav.settings')}
   </NavigationButton>
 </NavigationBar>
 <div id="main">
@@ -687,7 +730,7 @@
           </div>
           <div class="editor-main">
             <div class="blockly-container">
-              <BlocklyComponent {config} locale={currentBlocklyLocale} bind:workspace />
+              <BlocklyComponent config={blocklyWorkspaceConfig} locale={currentBlocklyLocale} bind:workspace />
             </div>
             <div class="code">
               <CodePreview {code} />
@@ -763,7 +806,7 @@
             <p class="debugger-error">{loadError}</p>
           {/if}
           <p class="debugger-status">
-            Imported Extension: <b>{properties.name}</b> (`{properties.id}`)
+            {t('debugger.importedExtension')}: <b>{properties.name}</b> (`{properties.id}`)
           </p>
           <label class="debugger-extension-uri">
             {t('debugger.extensionUrl')}

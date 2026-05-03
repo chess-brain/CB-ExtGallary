@@ -31,9 +31,9 @@
         <input type="text" placeholder={t('variables.variableName')} bind:value={varName}>
         <select bind:value={varType}>
             <option value="null">{t('variables.unknown')}</option>
-            <option value="String">{t('blocks.string')}</option>
-            <option value="Number">{t('blocks.number')}</option>
-            <option value="Boolean">{t('blocks.boolean')}</option>
+            <option value="String">{t('variables.typeString')}</option>
+            <option value="Number">{t('variables.typeNumber')}</option>
+            <option value="Boolean">{t('variables.typeBoolean')}</option>
             <option value="List">{t('variables.list')}</option>
             <option value="Vector">{t('variables.vector')}</option>
         </select>

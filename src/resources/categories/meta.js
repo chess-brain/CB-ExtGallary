@@ -1,4 +1,5 @@
 import Blockly from "blockly/core";
+import * as i18n from '../../i18n';
 
 const SEARCH_STORAGE_KEY = "extforge_toolbox_search_v1";
 const FAVORITES_STORAGE_KEY = "extforge_toolbox_favorites_v1";
@@ -54,12 +55,17 @@ export default (workspace) => {
             : allTypes;
 
         blockList.push(createExtendableElement("button")
-            .setAttribute("text", term ? `Search: ${term} (click to change)` : "Set search keyword")
+            .setAttribute(
+                "text",
+                term
+                    ? i18n.t('toolbox.searchActive').replace('%1', term)
+                    : i18n.t('toolbox.searchSetKeyword'),
+            )
             .setAttribute("callbackkey", "search_set"));
 
         if (term) {
             blockList.push(createExtendableElement("button")
-                .setAttribute("text", "Clear search")
+                .setAttribute("text", i18n.t('toolbox.searchClear'))
                 .setAttribute("callbackkey", "search_clear"));
         }
 
@@ -75,15 +81,15 @@ export default (workspace) => {
         const favorites = getFavorites().filter((type) => Blockly.Blocks[type]);
 
         blockList.push(createExtendableElement("button")
-            .setAttribute("text", "Add selected block to favorites")
+            .setAttribute("text", i18n.t('toolbox.favoritesAddSelected'))
             .setAttribute("callbackkey", "favorites_add_selected"));
         blockList.push(createExtendableElement("button")
-            .setAttribute("text", "Remove favorite by block type")
+            .setAttribute("text", i18n.t('toolbox.favoritesRemoveByType'))
             .setAttribute("callbackkey", "favorites_remove_by_type"));
 
         if (favorites.length > 0) {
             blockList.push(createExtendableElement("button")
-                .setAttribute("text", "Clear favorites")
+                .setAttribute("text", i18n.t('toolbox.favoritesClear'))
                 .setAttribute("callbackkey", "favorites_clear"));
             blockList.push(createExtendableElement("sep").setAttribute("gap", "24"));
             for (const type of favorites) {

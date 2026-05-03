@@ -7,11 +7,13 @@ const categoryColor = '#fc6';
 function register() {
     registerBlock(`${categoryPrefix}loaded`, {
         message0: '%{BKY_EVENTS_LOADED}',
-        args0: [
+        args0: [],
+        message1: '%1',
+        args1: [
             {
-                "type": "input_statement",
-                "name": "BLOCKS"
-            }
+                type: 'input_statement',
+                name: 'BLOCKS',
+            },
         ],
         inputsInline: false,
         colour: categoryColor
@@ -23,11 +25,13 @@ function register() {
 
     registerBlock(`${categoryPrefix}thread`, {
         message0: '%{BKY_EVENTS_THREAD}',
-        args0: [
+        args0: [],
+        message1: '%1',
+        args1: [
             {
-                "type": "input_statement",
-                "name": "BLOCKS"
-            }
+                type: 'input_statement',
+                name: 'BLOCKS',
+            },
         ],
         previousStatement: null,
         nextStatement: null,

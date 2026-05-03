@@ -34,7 +34,9 @@ export default {
     projectId: '项目ID',
     projectColor: '项目颜色',
     id: 'ID',
-    color: '颜色'
+    color: '颜色',
+    defaultId: 'extensionID',
+    defaultExtensionName: '扩展'
   },
   // 设置
   settings: {
@@ -47,10 +49,19 @@ export default {
   },
   // 导出
   export: {
-    exportAsJS: '导出为JS',
-    exportAsEXF: '导出为EXF',
+    exportProject: '导出项目',
+    exportOptions: '导出选项',
+    exportAsJS: '导出为 JS',
+    exportAsEXF: '导出为 EXF',
+    exportAsJSDesc: '下载为单个 .js 文件',
+    exportAsEXFDesc: '下载项目包（.exf）',
     copyCode: '复制代码',
-    exportModalTitle: '导出选项'
+    copyCodeDesc: '将生成的代码复制到剪贴板',
+    exportInformation: '说明',
+    exportInfoText: 'EXF 压缩包内含 project.json 与扩展脚本，便于备份或分享。',
+    exportModalTitle: '导出选项',
+    codeCopied: '代码已复制到剪贴板。',
+    copyFailed: '复制代码失败。'
   },
   // 调试器
   debugger: {
@@ -62,7 +73,8 @@ export default {
     debuggerNote: '调试器现在直接在新窗口中打开，以进行稳定测试。',
     lastDraftAutoSave: '上次草稿自动保存',
     notYet: '尚未',
-    recentFiles: '最近文件'
+    recentFiles: '最近文件',
+    importedExtension: '已导入的扩展'
   },
   // 消息
   messages: {
@@ -73,13 +85,103 @@ export default {
     failedToExportEXF: '导出EXF文件失败。',
     resetConfirm: '重置当前项目？这将清除所有积木和自定义数据。',
     deleteBlockConfirm: '确定要删除这个积木吗？',
-    testingFeature: '测试此功能！'
+    testingFeature: '测试此功能！',
+    searchNoResults: '没有匹配的积木。',
+    importFailedPrefix: '导入失败：',
+    unknownError: '未知错误',
+    importMissingProjectJson: '缺少 data/project.json',
+    exportReadmeTitle: 'README.txt',
+    exportReadmeBody:
+      '请勿手动打开此压缩包内的文件。\n操作不当可能导致扩展永久损坏！',
+    exportFailedAlert: '导出失败。'
+  },
+  toolboxCat: {
+    events: '事件',
+    control: '控制',
+    math: '运算',
+    strings: '字符串',
+    vectors: '向量',
+    inputs: '输入',
+    variables: '变量',
+    lists: '列表',
+    lambdas: '函数',
+    blocks: '积木',
+    runtime: '运行时',
+    targets: '目标',
+    browser: '浏览器',
+    music: '音乐',
+    search: '搜索',
+    favorites: '收藏'
+  },
+  toolbox: {
+    registerVariable: '注册变量',
+    removeVariable: '删除变量',
+    searchSetKeyword: '设置搜索关键词',
+    searchActive: '搜索：%1（点击修改）',
+    searchClear: '清除搜索',
+    favoritesAddSelected: '将选中积木加入收藏',
+    favoritesRemoveByType: '按类型移除收藏',
+    favoritesClear: '清空收藏',
+    selectBlockFirst: '请先在编辑器中选中一块积木。',
+    noFavoritesYet: '暂无收藏。',
+    removeFavoritePrompt: '输入要移除的积木类型',
+    clearFavoritesConfirm: '清空所有收藏的积木类型？',
+    variablesRemovePrompt: '要删除的变量名称',
+    searchKeywordPrompt: '按关键词搜索积木类型'
+  },
+  blocksUi: {
+    editBlock: '编辑积木',
+    fieldType: '类型',
+    fieldText: '文本',
+    label: '标签',
+    string: '字符串',
+    number: '数字',
+    boolean: '布尔',
+    defaultValue: '默认值',
+    delete: '删除',
+    addField: '添加字段',
+    command: '命令',
+    reporter: '报告器',
+    confirmCreate: '确定创建该积木？',
+    confirmDelete: '确定删除该积木？',
+    blockColorPrompt: '输入该积木的颜色（十六进制）：',
+    edit: '编辑',
+    color: '颜色',
+    noBlocks: '暂无自定义积木。',
+    createBlockAria: '创建自定义积木'
+  },
+  blockly: {
+    loadingToolbox: '加载中…'
+  },
+  variables: {
+    registerVariable: '注册变量',
+    variableName: '变量名',
+    unknown: '任意类型',
+    list: '列表',
+    vector: '向量',
+    register: '注册',
+    typeString: '字符串',
+    typeNumber: '数字',
+    typeBoolean: '布尔'
+  },
+  experiments: {
+    title: '实验功能',
+    debuggerAdded: '已添加调试器标签页。',
+    debuggerDesc: '在「调试器」标签页中可在预览环境中运行扩展。',
+    moreLanguages: '后续可能会增加更多语言。'
+  },
+  compiler: {
+    unsandboxedRequired: '该扩展需要在非沙箱（unsandboxed）模式下运行！'
   },
   // Blockly积木翻译
   blocks: {
+    BLOCKS_DEFINE_TOOLTIP: '定义自定义积木的实现。',
+    BLOCKS_EXECUTE_TOOLTIP: '运行自定义积木。',
+    BLOCKS_CUSTOM_MISSING: '（自定义积木）',
+    BLOCKS_RETURN: '返回 %1',
     // 事件
-    EVENTS_LOADED: '当扩展加载时 %1',
-    EVENTS_THREAD: '在新线程中执行 %1',
+    EVENTS_LOADED: '当扩展加载时',
+    EVENTS_THREAD: '在新线程中执行',
     EVENTS_REGBROADCAST: '当收到广播 %1 时 %2',
     EVENTS_BROADCAST: '广播 %1',
     EVENTS_BROADCASTW: '广播 %1 并等待',

@@ -1,3 +1,5 @@
+import * as i18n from '../../i18n';
+
 /** @param {import('blockly').Workspace} workspace */
 function register(workspace) {
     const SEARCH_STORAGE_KEY = "extforge_toolbox_search_v1";
@@ -21,16 +23,17 @@ function register(workspace) {
     });
 
     workspace.registerButtonCallback("variables_remove", () => {
-        let v = prompt("temporary delete variable prompt (put variable name here)")
-        if (v != "") {
-            delete window.variables[v]
-            workspace.refreshToolboxSelection()
+        const v = prompt(i18n.t('toolbox.variablesRemovePrompt'));
+        if (v == null || String(v).trim() === '') {
+            return;
         }
+        delete window.variables[v.trim()];
+        workspace.refreshToolboxSelection();
     });
 
     workspace.registerButtonCallback("search_set", () => {
         const current = localStorage.getItem(SEARCH_STORAGE_KEY) || "";
-        const next = prompt("Search block types by keyword", current);
+        const next = prompt(i18n.t('toolbox.searchKeywordPrompt'), current);
         if (next === null) return;
         localStorage.setItem(SEARCH_STORAGE_KEY, next.trim());
         workspace.refreshToolboxSelection();
@@ -45,7 +48,7 @@ function register(workspace) {
         const selected = (workspace.getSelected && workspace.getSelected())
             || (window.Blockly && window.Blockly.getSelected && window.Blockly.getSelected());
         if (!selected?.type) {
-            alert("Select a block in the editor first.");
+            alert(i18n.t('toolbox.selectBlockFirst'));
             return;
         }
 
@@ -60,17 +63,17 @@ function register(workspace) {
     workspace.registerButtonCallback("favorites_remove_by_type", () => {
         const favorites = readFavorites();
         if (favorites.length === 0) {
-            alert("No favorites yet.");
+            alert(i18n.t('toolbox.noFavoritesYet'));
             return;
         }
-        const removeType = prompt("Enter block type to remove", favorites[0]);
+        const removeType = prompt(i18n.t('toolbox.removeFavoritePrompt'), favorites[0]);
         if (!removeType) return;
         saveFavorites(favorites.filter((type) => type !== removeType.trim()));
         workspace.refreshToolboxSelection();
     });
 
     workspace.registerButtonCallback("favorites_clear", () => {
-        if (!confirm("Clear all favorite blocks?")) return;
+        if (!confirm(i18n.t('toolbox.clearFavoritesConfirm'))) return;
         localStorage.removeItem(FAVORITES_STORAGE_KEY);
         workspace.refreshToolboxSelection();
     });

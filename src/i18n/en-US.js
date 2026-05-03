@@ -34,7 +34,9 @@ export default {
     projectId: 'Project ID',
     projectColor: 'Project Color',
     id: 'ID',
-    color: 'Color'
+    color: 'Color',
+    defaultId: 'extensionID',
+    defaultExtensionName: 'Extension'
   },
   // Settings
   settings: {
@@ -47,10 +49,20 @@ export default {
   },
   // Export
   export: {
+    exportProject: 'Export project',
+    exportOptions: 'Export options',
     exportAsJS: 'Export as JS',
     exportAsEXF: 'Export as EXF',
+    exportAsJSDesc: 'Download as a single .js file',
+    exportAsEXFDesc: 'Download project package as .exf',
     copyCode: 'Copy Code',
-    exportModalTitle: 'Export Options'
+    copyCodeDesc: 'Copy generated code to clipboard',
+    exportInformation: 'Information',
+    exportInfoText:
+      'EXF archives contain project data and generated JavaScript for backup or sharing.',
+    exportModalTitle: 'Export Options',
+    codeCopied: 'Code copied to clipboard.',
+    copyFailed: 'Failed to copy code.'
   },
   // Debugger
   debugger: {
@@ -62,7 +74,8 @@ export default {
     debuggerNote: 'The debugger now opens directly in a new window for stable testing.',
     lastDraftAutoSave: 'Last draft auto-saved',
     notYet: 'Not yet',
-    recentFiles: 'Recent Files'
+    recentFiles: 'Recent Files',
+    importedExtension: 'Imported extension'
   },
   // Messages
   messages: {
@@ -73,13 +86,106 @@ export default {
     failedToExportEXF: 'Failed to export EXF file.',
     resetConfirm: 'Reset the current project? This will clear all blocks and custom data.',
     deleteBlockConfirm: 'Are you sure you want to delete this block?',
-    testingFeature: 'Testing this feature!'
+    testingFeature: 'Testing this feature!',
+    searchNoResults: 'No blocks matched this query.',
+    importFailedPrefix: 'Import failed:',
+    unknownError: 'Unknown error',
+    importMissingProjectJson: 'Missing data/project.json',
+    exportReadmeTitle: 'README.txt',
+    exportReadmeBody:
+      'This package is not meant to be opened manually.\nBe careful — you can permanently break your extension!',
+    exportFailedAlert: 'Export failed.'
+  },
+  /** Toolbox sidebar category labels (Blockly XML name=) */
+  toolboxCat: {
+    events: 'Events',
+    control: 'Control',
+    math: 'Math',
+    strings: 'Strings',
+    vectors: 'Vectors',
+    inputs: 'Inputs',
+    variables: 'Variables',
+    lists: 'Lists',
+    lambdas: 'Lambdas',
+    blocks: 'Blocks',
+    runtime: 'Runtime',
+    targets: 'Targets',
+    browser: 'Browser',
+    music: 'Music',
+    search: 'Search',
+    favorites: 'Favorites'
+  },
+  /** Flyout buttons & prompts (toolbox callbacks) */
+  toolbox: {
+    registerVariable: 'Register variable',
+    removeVariable: 'Remove variable',
+    searchSetKeyword: 'Set search keyword',
+    searchActive: 'Search: %1 (click to change)',
+    searchClear: 'Clear search',
+    favoritesAddSelected: 'Add selected block to favorites',
+    favoritesRemoveByType: 'Remove favorite by block type',
+    favoritesClear: 'Clear favorites',
+    selectBlockFirst: 'Select a block in the editor first.',
+    noFavoritesYet: 'No favorites yet.',
+    removeFavoritePrompt: 'Enter block type to remove',
+    clearFavoritesConfirm: 'Clear all favorite blocks?',
+    variablesRemovePrompt: 'Variable name to remove',
+    searchKeywordPrompt: 'Search block types by keyword'
+  },
+  /** Custom blocks editor UI (not merged into Blockly.Msg) */
+  blocksUi: {
+    editBlock: 'Edit block',
+    fieldType: 'Type',
+    fieldText: 'Text',
+    label: 'Label',
+    string: 'String',
+    number: 'Number',
+    boolean: 'Boolean',
+    defaultValue: 'Default',
+    delete: 'Delete',
+    addField: 'Add field',
+    command: 'Command',
+    reporter: 'Reporter',
+    confirmCreate: 'Create this block?',
+    confirmDelete: 'Delete this block?',
+    blockColorPrompt: 'Enter a color for this block (hex):',
+    edit: 'Edit',
+    color: 'Color',
+    noBlocks: 'No custom blocks yet.',
+    createBlockAria: 'Create custom block'
+  },
+  blockly: {
+    loadingToolbox: 'Loading…'
+  },
+  variables: {
+    registerVariable: 'Register variable',
+    variableName: 'Variable name',
+    unknown: 'Any type',
+    list: 'List',
+    vector: 'Vector',
+    register: 'Register',
+    typeString: 'String',
+    typeNumber: 'Number',
+    typeBoolean: 'Boolean'
+  },
+  experiments: {
+    title: 'Experiments',
+    debuggerAdded: 'Debugger tab added.',
+    debuggerDesc: 'Use the Debugger tab to open your extension in the preview environment.',
+    moreLanguages: 'More languages may be added later.'
+  },
+  compiler: {
+    unsandboxedRequired: 'This extension needs to be unsandboxed to run!'
   },
   // Blockly Block Translations
   blocks: {
+    BLOCKS_DEFINE_TOOLTIP: 'Define a custom block implementation.',
+    BLOCKS_EXECUTE_TOOLTIP: 'Run a custom block.',
+    BLOCKS_CUSTOM_MISSING: '(custom block)',
+    BLOCKS_RETURN: 'return %1',
     // Events
-    EVENTS_LOADED: 'when extension loads %1',
-    EVENTS_THREAD: 'run in new thread %1',
+    EVENTS_LOADED: 'when extension loads',
+    EVENTS_THREAD: 'run in new thread',
     EVENTS_REGBROADCAST: 'when broadcast %1 received %2',
     EVENTS_BROADCAST: 'broadcast %1',
     EVENTS_BROADCASTW: 'broadcast %1 and wait',

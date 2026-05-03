@@ -1,3 +1,5 @@
+import * as i18n from '../../i18n';
+
 const createExtendableElement = (type) => {
     /**
      * @type {HTMLDivElement}
@@ -32,12 +34,12 @@ export default (workspace) => {
     workspace.registerToolboxCategoryCallback("variables", () => {
         const blockList = [];
         blockList.push(createExtendableElement('button')
-            .setAttribute('text', 'Register variable')
+            .setAttribute('text', i18n.t('toolbox.registerVariable'))
             .setAttribute('callbackkey', 'variables_register'))
 
         if (window.variables && Object.keys(window.variables).length > 0) {
             blockList.push(createExtendableElement('button')
-                .setAttribute('text', 'Remove variable')
+                .setAttribute('text', i18n.t('toolbox.removeVariable'))
                 .setAttribute('callbackkey', 'variables_remove'))
             blockList.push(createExtendableElement('block')
                 .setAttribute('type', 'variables_get'));

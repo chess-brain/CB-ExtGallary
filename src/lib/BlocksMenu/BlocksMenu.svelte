@@ -34,7 +34,7 @@
     function createBlock() {
         if (typeof window === 'undefined' || !window.workspace) return
         
-        if (!confirm(t('blocks.confirmCreate'))) return
+        if (!confirm(t('blocksUi.confirmCreate'))) return
 
         let id = util.randomHex(16)
         let block = {
@@ -80,7 +80,7 @@
     function deleteBlock(id) {
         if (typeof window === 'undefined') return
         
-        if (!confirm(t('blocks.confirmDelete'))) return
+        if (!confirm(t('blocksUi.confirmDelete'))) return
 
         delete window.blocks[id]
         
@@ -104,7 +104,7 @@
         if (typeof window === 'undefined') return
         
         // Use a simple input instead of prompt() for better compatibility
-        let color = window.prompt ? window.prompt("Enter a color for this block (hex code):", window.blocks[id].colour || "#4bf") : "#4bf"
+        let color = window.prompt ? window.prompt(t('blocksUi.blockColorPrompt'), window.blocks[id].colour || "#4bf") : "#4bf"
         if (color) {
             window.blocks[id].colour = color
             updateBlocks()
@@ -126,13 +126,13 @@
         <div class="block" style="border-left: 4px solid {block.colour || '#4bf'}">
             <span class="name">{util.blockToName(block.fields)}</span>
             <div class="block-actions">
-                <button class="edit" on:click={() => editBlock(id)}>{t('blocks.edit')}</button>
-                <button class="color" on:click={() => changeBlockColor(id)}>{t('blocks.color')}</button>
-                <button class="delete" on:click={() => deleteBlock(id)}>{t('blocks.delete')}</button>
+                <button class="edit" on:click={() => editBlock(id)}>{t('blocksUi.edit')}</button>
+                <button class="color" on:click={() => changeBlockColor(id)}>{t('blocksUi.color')}</button>
+                <button class="delete" on:click={() => deleteBlock(id)}>{t('blocksUi.delete')}</button>
             </div>
         </div>
     {:else}
-        <p>{t('blocks.noBlocks')}</p>
+        <p>{t('blocksUi.noBlocks')}</p>
     {/each}    
 </div>
 

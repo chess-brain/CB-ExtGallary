@@ -1,7 +1,9 @@
 <script>
+    import { browser } from "$app/environment";
     import Modal from "./Modal.svelte";
     import util from "../../resources/util";
     import * as i18n from "../../i18n";
+    import "../../resources/blockly-en-first.js";
     
     // 使用函数包装t，确保每次都获取最新的语言
     function t(key) {
@@ -17,7 +19,7 @@
     import "blockly/javascript";
 
     import BlocklyComponent from "$lib/svelte-blockly";
-    import { onMount } from "svelte";
+    import { onMount, onDestroy, tick } from "svelte";
     /** @type {Blockly.WorkspaceSvg} */
     let workspace;
 
@@ -42,22 +44,27 @@
         },
     };
 
+    function centerPreviewIfReady() {
+        if (workspace?.centerOnBlock && previewBlock?.id) {
+            workspace.centerOnBlock(previewBlock.id);
+        }
+    }
+
     function updateBlocks(data) {
-        previewBlock.blockId_ = data.blockId
-        previewBlock.updateShape_()
+        if (!workspace || !previewBlock || data?.blockId === undefined) return;
+        previewBlock.blockId_ = data.blockId;
+        previewBlock.updateShape_();
         previewBlock.initSvg();
         previewBlock.render();
-        requestAnimationFrame(() => {
-            workspace.centerOnBlock(previewBlock.id)
-        })
+        requestAnimationFrame(centerPreviewIfReady);
 
         //refresh workspace
         try {
-            let workspaceG = window.workspace
+            let workspaceG = window.workspace;
             let xml = Blockly.Xml.workspaceToDom(workspaceG);
             workspaceG.clear();
             Blockly.Xml.domToWorkspace(xml, workspaceG);
-            this.refreshToolboxSelection();
+            workspaceG.refreshToolboxSelection?.();
         } catch {}
     }
 
@@ -67,24 +74,41 @@
         updateBlocks(data)
     }
 
-    let previewBlock
+    let previewBlock;
 
-    onMount(() => {
+    /** @param {Event} _ev */
+    function onResize(_ev) {
+        centerPreviewIfReady();
+    }
+
+    onMount(async () => {
+        await tick();
+        for (let i = 0; i < 120 && !workspace; i++) {
+            await new Promise((r) => requestAnimationFrame(r));
+        }
+        if (!workspace) return;
+
         previewBlock = workspace.newBlock("blocks_execute");
 
-        const old = window.modals[id].update
-        window.modals[id].update = function() {
-            old.call(this)
-            updateBlocks(window.modals[id])
+        const modalData = window.modals[id];
+        const old = modalData?.update;
+        if (modalData && typeof old === "function") {
+            modalData.update = function () {
+                old.call(this);
+                updateBlocks(window.modals[id]);
+            };
         }
 
-        addEventListener("resize", ev => {
-            workspace.centerOnBlock(previewBlock.id)
-        })
+        window.addEventListener("resize", onResize);
+    });
+
+    onDestroy(() => {
+        if (!browser) return;
+        window.removeEventListener("resize", onResize);
     });
 </script>
 
-<Modal {id} title={t('blocks.editBlock')} let:data>
+<Modal {id} title={t('blocksUi.editBlock')} let:data>
     <div class="main">
         <div class="preview">
             <BlocklyComponent {config} locale={en} bind:workspace />
@@ -92,8 +116,8 @@
         <div class="fields">
             <table class="fields">
                 <tr>
-                    <th>{t('blocks.type')}</th>
-                    <th>{t('blocks.text')}</th>
+                    <th>{t('blocksUi.fieldType')}</th>
+                    <th>{t('blocksUi.fieldText')}</th>
                     <th><!-- options --></th>
                     <th><!-- buttons --></th>
                 </tr>
@@ -105,10 +129,10 @@
                                 data.update()
                                 updateBlocks(data)
                             }}>
-                                <option value="label">{t('blocks.label')}</option>
-                                <option value="string">{t('blocks.string')}</option>
-                                <option value="number">{t('blocks.number')}</option>
-                                <option value="boolean">{t('blocks.boolean')}</option>
+                                <option value="label">{t('blocksUi.label')}</option>
+                                <option value="string">{t('blocksUi.string')}</option>
+                                <option value="number">{t('blocksUi.number')}</option>
+                                <option value="boolean">{t('blocksUi.boolean')}</option>
                             </select>
                         </td>
                         <td>
@@ -120,13 +144,13 @@
                         </td>
                         <td>
                             {#if data.tempBlock.fields[i].type == "string"}
-                                <input type="text" value={data.tempBlock.fields[i].default ?? ""} placeholder={t('blocks.defaultValue')} on:change={(e) => {
+                                <input type="text" value={data.tempBlock.fields[i].default ?? ""} placeholder={t('blocksUi.defaultValue')} on:change={(e) => {
                                     data.tempBlock.fields[i].default = e.target.value
                                     data.update()
                                     updateBlocks(data)
                                 }} />
                             {:else if data.tempBlock.fields[i].type == "number"}
-                                <input type="number" value={data.tempBlock.fields[i].default ?? ""} placeholder={t('blocks.defaultValue')} on:change={(e) => {
+                                <input type="number" value={data.tempBlock.fields[i].default ?? ""} placeholder={t('blocksUi.defaultValue')} on:change={(e) => {
                                     data.tempBlock.fields[i].default = e.target.value
                                     data.update()
                                     updateBlocks(data)
@@ -138,7 +162,7 @@
                                 data.tempBlock.fields.splice(i, 1)
                                 data.update()
                                 updateBlocks(data)
-                            }}>{t('blocks.delete')}</button>
+                            }}>{t('blocksUi.delete')}</button>
                         </td>
                     </tr>
                 {/each}
@@ -154,15 +178,15 @@
                 })
                 data.update()
                 updateBlocks(data)
-            }}>{t('blocks.addField')}</button>
+            }}>{t('blocksUi.addField')}</button>
             <select value={(data.tempBlock ?? {}).type} on:change={(e) => {
                 data.tempBlock.type = e.target.value
                 data.update()
                 updateBlocks(data)
             }}>
-                <option value="command">{t('blocks.command')}</option>
-                <option value="reporter">{t('blocks.reporter')}</option>
-                <option value="Boolean">{t('blocks.boolean')}</option>
+                <option value="command">{t('blocksUi.command')}</option>
+                <option value="reporter">{t('blocksUi.reporter')}</option>
+                <option value="Boolean">{t('blocksUi.boolean')}</option>
             </select>
         </div>
     </div>
