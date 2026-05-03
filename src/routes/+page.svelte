@@ -124,8 +124,7 @@
     return xml;
   }
 
-  $: blocklyWorkspaceConfig = (currentLanguage,
-    {
+  $: blocklyWorkspaceConfig = ((_lang) => ({
       toolbox: localizeToolboxXml(),
       collapse: true,
       comments: true,
@@ -134,7 +133,7 @@
       zoom: BLOCKLY_ZOOM,
       sounds: false,
       plugins: BLOCKLY_PLUGINS,
-    });
+    }))(currentLanguage);
 
   let localConfig = {
     dark: false,
