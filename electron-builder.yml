@@ -1,0 +1,61 @@
+# Naming aligned with common Electron Builder artifacts (Setup / Portable / dmg / AppImage / deb).
+# Legacy OS variants (e.g. older macOS DMGs) usually need separate CI matrix rows or older Electron.
+appId: com.cb.extgallery
+productName: CB-ExtGallery
+copyright: Copyright © 2026
+
+directories:
+  output: release
+  buildResources: electron-assets
+
+files:
+  - build/**/*
+  - electron/**/*
+  - package.json
+
+asar: true
+
+# Icons from npm run prepare:electron-icons (source: repo-root icon.ico)
+win:
+  icon: electron-assets/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: nsis
+      arch: [ia32]
+    - target: nsis
+      arch: [arm64]
+    - target: portable
+      arch: [x64]
+  artifactName: ${productName}-Setup-${version}-${arch}.${ext}
+
+portable:
+  artifactName: ${productName}.Portable.${version}.${arch}.${ext}
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+
+mac:
+  icon: electron-assets/icon.icns
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  category: public.app-category.developer-tools
+  artifactName: ${productName}-Setup-${version}-${arch}.${ext}
+
+dmg:
+  artifactName: ${productName}-Setup-${version}-${arch}.${ext}
+
+linux:
+  icon: electron-assets/icon.png
+  target:
+    - target: AppImage
+      arch: [x64, arm64]
+    - target: deb
+      arch: [x64, arm64]
+  category: Development
+  vendor: CB
+  artifactName: ${productName}-Setup-${version}-${arch}.${ext}

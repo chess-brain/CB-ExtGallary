@@ -1,22 +1,39 @@
 {
 	"name": "CB-ExtGallary",
 	"version": "0.0.1",
+	"description": "Blockly extension gallery desktop shell",
+	"author": "ChessBrainIsNotHuman <3690985693@qq.com>",
 	"private": true,
+	"main": "electron/main.cjs",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
+		"electron:dev": "concurrently -k \"cross-env NODE_ENV=development vite dev\" \"wait-on tcp:127.0.0.1:5173 && cross-env NODE_ENV=development electron .\"",
+		"prepare:electron-icons": "node scripts/prepare-electron-icons.mjs",
+		"electron:pack": "npm run prepare:electron-icons && vite build && electron-builder --dir",
+		"build:desktop": "npm run prepare:electron-icons && vite build && electron-builder",
+		"build:win": "npm run prepare:electron-icons && vite build && electron-builder --win",
+		"build:mac": "npm run prepare:electron-icons && vite build && electron-builder --mac",
+		"build:linux": "npm run prepare:electron-icons && vite build && electron-builder --linux"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.5",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"concurrently": "^9.1.2",
+		"cross-env": "^7.0.3",
+		"electron": "^33.2.0",
+		"electron-builder": "^25.1.8",
+		"png2icons": "^2.0.1",
+		"sharp": "^0.34.5",
 		"svelte": "^4.2.7",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
-		"vite": "^5.0.3"
+		"vite": "^5.0.3",
+		"wait-on": "^8.0.1"
 	},
 	"type": "module",
 	"dependencies": {
