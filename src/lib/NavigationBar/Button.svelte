@@ -45,10 +45,13 @@
         align-items: center;
         justify-content: center;
 
-        font-family: 'Noto Sans', sans-serif;
-        font-weight: 500;
-        font-size: 0.875rem;
-        color: white;
+        font-family: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-weight: 600;
+        font-size: clamp(0.8125rem, 1.65vw, 0.9375rem);
+        letter-spacing: 0.03em;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: rgba(255, 255, 255, 0.96);
         background: rgba(255, 255, 255, 0.1);
         cursor: pointer;
         border: 0;

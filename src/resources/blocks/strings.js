@@ -45,7 +45,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}join_mutator_join`, {
-        message0: 'join',
+        message0: '%{BKY_STRINGS_JOIN_LABEL}',
         args0: [],
         nextStatement: null,
         inputsInline: true,
@@ -53,7 +53,7 @@ function register() {
         colour: categoryColor,
     }, (block) => {})
     registerBlock(`${categoryPrefix}join_mutator_item`, {
-        message0: 'item',
+        message0: '%{BKY_STRINGS_ITEM_LABEL}',
         args0: [],
         previousStatement: null,
         nextStatement: null,
@@ -62,7 +62,7 @@ function register() {
     }, (block) => {})
 
     registerBlock(`${categoryPrefix}repeat`, {
-        message0: 'repeat %1 %2 times',
+        message0: '%{BKY_STRINGS_REPEAT}',
         args0: [
             {
                 "type": "field_input",
@@ -90,7 +90,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}split`, {
-        message0: 'split %1 with delimiter %2',
+        message0: '%{BKY_STRINGS_SPLIT}',
         args0: [
             {
                 "type": "field_input",
@@ -118,7 +118,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}length`, {
-        message0: 'length of %1',
+        message0: '%{BKY_STRINGS_LENGTH}',
         args0: [
             {
                 "type": "field_input",
@@ -138,7 +138,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}substring`, {
-        message0: 'substring %1 to %2 of %3',
+        message0: '%{BKY_STRINGS_SUBSTRING}',
         args0: [
             {
                 "type": "field_number",
@@ -190,7 +190,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}contains`, {
-        message0: '%1 %2 %3',
+        message0: '%{BKY_STRINGS_COMPARE}',
         args0: [
             {
                 "type": "field_input",
@@ -228,7 +228,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}log`, {
-        message0: 'log %1',
+        message0: '%{BKY_STRINGS_LOG}',
         args0: [
             {
                 "type": "field_input",
@@ -249,7 +249,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}amountof`, {
-        message0: 'amount of %1 in %2',
+        message0: '%{BKY_STRINGS_AMOUNT}',
         args0: [
             {
                 "type": "field_input",
@@ -277,7 +277,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}replace`, {
-        message0: 'replace %1 in %2 with %3',
+        message0: '%{BKY_STRINGS_REPLACE}',
         args0: [
             {
                 "type": "field_input",
@@ -313,7 +313,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}trim`, {
-        message0: 'trim %1',
+        message0: '%{BKY_STRINGS_TRIM}',
         args0: [
             {
                 "type": "field_input",
@@ -332,7 +332,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}case`, {
-        message0: '%1 case of %2',
+        message0: '%{BKY_STRINGS_CASE}',
         args0: [
             {
                 "type": "field_dropdown",
@@ -360,7 +360,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}match`, {
-        message0: '%1 matches regex %2 flags %3',
+        message0: '%{BKY_STRINGS_MATCH}',
         args0: [
             {
                 "type": "field_input",
@@ -487,7 +487,7 @@ function register() {
                 this.removeInput('EMPTY');
             } else if (this.items_ == 0 && !this.getInput('EMPTY')) {
                 this.appendDummyInput('EMPTY')
-                    .appendField("empty string");
+                    .appendField(Blockly.Msg.STRINGS_EMPTY_STRING || 'empty string');
             }
 
             for (let i = 0; i < this.items_; i++) {
@@ -503,7 +503,7 @@ function register() {
                         inputInside.outputConnection.connect(input.connection)
                     }
                     if (i === 0) {
-                        input.appendField("join");
+                        input.appendField(Blockly.Msg.STRINGS_JOIN_LABEL || 'join');
                     }
                 }
             }

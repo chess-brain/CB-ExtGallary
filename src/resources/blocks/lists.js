@@ -26,7 +26,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}create_mutator_list`, {
-        message0: 'list',
+        message0: '%{BKY_LISTS_LIST}',
         args0: [],
         nextStatement: null,
         inputsInline: true,
@@ -34,7 +34,7 @@ function register() {
         colour: categoryColor,
     }, (block) => {})
     registerBlock(`${categoryPrefix}create_mutator_item`, {
-        message0: 'item',
+        message0: '%{BKY_LISTS_ITEM}',
         args0: [],
         previousStatement: null,
         nextStatement: null,
@@ -43,7 +43,7 @@ function register() {
     }, (block) => {})
 
     registerBlock(`${categoryPrefix}get`, {
-        message0: 'get item %1 of %2',
+        message0: '%{BKY_LISTS_GET}',
         args0: [
             {
                 "type": "field_number",
@@ -69,7 +69,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}index`, {
-        message0: 'index of %1 in %2',
+        message0: '%{BKY_LISTS_INDEX}',
         args0: [
             {
                 "type": "field_input",
@@ -95,7 +95,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}contains`, {
-        message0: '%1 contains %2',
+        message0: '%{BKY_LISTS_CONTAINS}',
         args0: [
             {
                 "type": "input_value",
@@ -121,7 +121,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}set`, {
-        message0: 'set item %1 of %2 to %3',
+        message0: '%{BKY_LISTS_SET}',
         args0: [
             {
                 "type": "field_number",
@@ -155,7 +155,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}length`, {
-        message0: 'length of %1',
+        message0: '%{BKY_LISTS_LENGTH}',
         args0: [
             {
                 "type": "input_value",
@@ -173,7 +173,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}join`, {
-        message0: 'join %1 with delimiter %2',
+        message0: '%{BKY_LISTS_JOIN}',
         args0: [
             {
                 "type": "input_value",
@@ -199,7 +199,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}concat`, {
-        message0: 'concat %1 with %2',
+        message0: '%{BKY_LISTS_CONCAT}',
         args0: [
             {
                 "type": "input_value",
@@ -223,7 +223,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}unique`, {
-        message0: 'unique values of %1',
+        message0: '%{BKY_LISTS_UNIQUE}',
         args0: [
             {
                 "type": "input_value",
@@ -240,7 +240,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}sort`, {
-        message0: 'sort %1 mode %2',
+        message0: '%{BKY_LISTS_SORT}',
         args0: [
             {
                 "type": "input_value",
@@ -268,7 +268,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}filtercontains`, {
-        message0: 'filter %1 contains %2',
+        message0: '%{BKY_LISTS_FILTER}',
         args0: [
             {
                 "type": "input_value",
@@ -293,7 +293,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}foreach`, {
-        message0: 'for each %1 %2 in %3 %4 %5',
+        message0: '%{BKY_LISTS_FOREACH}',
         args0: [
             {
                 "type": "input_value",
@@ -340,7 +340,7 @@ function register() {
         return `${code}\n`;
     })
     registerBlock(`${categoryPrefix}foreachindex`, {
-        message0: 'index',
+        message0: '%{BKY_LISTS_FOREACH_INDEX}',
         args0: [],
         output: "Number",
         inputsInline: true,
@@ -351,7 +351,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}foreachvalue`, {
-        message0: 'value',
+        message0: '%{BKY_LISTS_FOREACH_VALUE}',
         args0: [],
         output: null,
         inputsInline: true,
@@ -454,7 +454,7 @@ function register() {
                 this.removeInput('EMPTY');
             } else if (this.items_ == 0 && !this.getInput('EMPTY')) {
                 this.appendDummyInput('EMPTY')
-                    .appendField("create empty list");
+                    .appendField(Blockly.Msg.LISTS_CREATE_EMPTY || 'create empty list');
             }
 
             for (let i = 0; i < this.items_; i++) {
@@ -469,7 +469,7 @@ function register() {
                         inputInside.outputConnection.connect(input.connection)
                     }
                     if (i === 0) {
-                        input.appendField("create list with");
+                        input.appendField(Blockly.Msg.LISTS_CREATE_WITH || 'create list with');
                     }
                 }
             }

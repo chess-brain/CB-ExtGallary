@@ -43,7 +43,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}add`, {
-        message0: '%1 + %2',
+        message0: '%{BKY_MATH_ADD}',
         args0: [
             {
                 "type": "field_number",
@@ -70,7 +70,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}sub`, {
-        message0: '%1 - %2',
+        message0: '%{BKY_MATH_SUB}',
         args0: [
             {
                 "type": "field_number",
@@ -97,7 +97,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}mul`, {
-        message0: '%1 × %2',
+        message0: '%{BKY_MATH_MUL}',
         args0: [
             {
                 "type": "field_number",
@@ -124,7 +124,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}div`, {
-        message0: '%1 ÷ %2',
+        message0: '%{BKY_MATH_DIV}',
         args0: [
             {
                 "type": "field_number",
@@ -151,7 +151,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}pow`, {
-        message0: '%1 ^ %2',
+        message0: '%{BKY_MATH_POW}',
         args0: [
             {
                 "type": "field_number",
@@ -178,7 +178,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}mod`, {
-        message0: '%1 % %2',
+        message0: '%{BKY_MATH_MOD}',
         args0: [
             {
                 "type": "field_number",
@@ -205,7 +205,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}log`, {
-        message0: 'log %1 %2',
+        message0: '%{BKY_MATH_LOG}',
         args0: [
             {
                 "type": "field_number",
@@ -256,7 +256,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}true`, {
-        message0: 'true',
+        message0: '%{BKY_MATH_TRUE}',
         args0: [],
         output: "Boolean",
         inputsInline: true,
@@ -266,7 +266,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}false`, {
-        message0: 'false',
+        message0: '%{BKY_MATH_FALSE}',
         args0: [],
         output: "Boolean",
         inputsInline: true,
@@ -276,7 +276,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}randombool`, {
-        message0: 'random',
+        message0: '%{BKY_MATH_RANDOM_BOOL}',
         args0: [],
         output: "Boolean",
         inputsInline: true,
@@ -287,7 +287,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}and`, {
-        message0: '%1 and %2',
+        message0: '%{BKY_MATH_AND}',
         args0: [
             {
                 "type": "input_value",
@@ -310,7 +310,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}xor`, {
-        message0: '%1 xor %2',
+        message0: '%{BKY_MATH_XOR}',
         args0: [
             {
                 "type": "input_value",
@@ -333,7 +333,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}or`, {
-        message0: '%1 or %2',
+        message0: '%{BKY_MATH_OR}',
         args0: [
             {
                 "type": "input_value",
@@ -356,7 +356,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}not`, {
-        message0: 'not %1',
+        message0: '%{BKY_MATH_NOT}',
         args0: [
             {
                 "type": "input_value",
@@ -374,7 +374,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}equals`, {
-        message0: '%1 = %2',
+        message0: '%{BKY_MATH_EQUALS}',
         args0: [
             {
                 "type": "field_input",
@@ -402,7 +402,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}gte`, {
-        message0: '%1 >= %2',
+        message0: '%{BKY_MATH_GTE}',
         args0: [
             {
                 "type": "field_number",
@@ -430,7 +430,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}gt`, {
-        message0: '%1 > %2',
+        message0: '%{BKY_MATH_GT}',
         args0: [
             {
                 "type": "field_number",
@@ -458,7 +458,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}lt`, {
-        message0: '%1 < %2',
+        message0: '%{BKY_MATH_LT}',
         args0: [
             {
                 "type": "field_number",
@@ -486,7 +486,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}lte`, {
-        message0: '%1 <= %2',
+        message0: '%{BKY_MATH_LTE}',
         args0: [
             {
                 "type": "field_number",
@@ -514,7 +514,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}random`, {
-        message0: 'pick random %1 to %2',
+        message0: '%{BKY_MATH_PICK_RANDOM}',
         args0: [
             {
                 "type": "field_number",
@@ -542,7 +542,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}fn`, {
-        message0: '%1 of %2',
+        message0: '%{BKY_MATH_FN}',
         args0: [
             {
                 "type": "field_dropdown",
@@ -582,7 +582,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}clamp`, {
-        message0: 'clamp %1 between %2 and %3',
+        message0: '%{BKY_MATH_CLAMP}',
         args0: [
             {
                 "type": "field_number",

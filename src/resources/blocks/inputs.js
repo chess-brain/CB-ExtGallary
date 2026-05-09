@@ -61,7 +61,7 @@ let keys = [
 
 function register() {
     registerBlock(`${categoryPrefix}keypress`, {
-        message0: 'is key %1 pressed?',
+        message0: '%{BKY_INPUTS_KEY_PRESS}',
         args0: [
             {
                 "type": "field_dropdown",
@@ -81,7 +81,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}keyspressed`, {
-        message0: 'keys pressed',
+        message0: '%{BKY_INPUTS_KEYS_PRESSED}',
         args0: [],
         output: "List",
         inputsInline: true,
@@ -92,7 +92,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}mousex`, {
-        message0: 'mouse x',
+        message0: '%{BKY_INPUTS_MOUSE_X}',
         args0: [],
         output: "Number",
         inputsInline: true,
@@ -102,7 +102,7 @@ function register() {
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}mousey`, {
-        message0: 'mouse y',
+        message0: '%{BKY_INPUTS_MOUSE_Y}',
         args0: [],
         output: "Number",
         inputsInline: true,
@@ -113,7 +113,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}moused`, {
-        message0: 'mouse down',
+        message0: '%{BKY_INPUTS_MOUSE_DOWN}',
         args0: [],
         output: "Boolean",
         inputsInline: true,

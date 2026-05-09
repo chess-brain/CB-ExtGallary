@@ -6,8 +6,8 @@ export default {
     export: '导出',
     load: '加载',
     reset: '重置',
-    saveDraft: '保存草稿',
-    restoreDraft: '恢复草稿',
+    saveDraft: '存稿',
+    restoreDraft: '恢复',
     experiments: '实验',
     language: '语言',
     discord: 'Discord',
@@ -17,7 +17,7 @@ export default {
   // 标签页
   tabs: {
     editor: '编辑器',
-    display: '显示',
+    display: '属性与积木',
     settings: '设置',
     debugger: '调试器'
   },
@@ -45,7 +45,9 @@ export default {
     export: '导出',
     darkMode: '深色模式',
     minifyCode: '压缩代码',
-    includeComments: '包含注释'
+    includeComments: '包含注释',
+    hideNavLogo: '隐藏顶部栏 Logo',
+    navLogoOnNarrow: '窄屏仍显示 Logo'
   },
   // 导出
   export: {
@@ -58,23 +60,25 @@ export default {
     copyCode: '复制代码',
     copyCodeDesc: '将生成的代码复制到剪贴板',
     exportInformation: '说明',
-    exportInfoText: 'EXF 压缩包内含 project.json 与扩展脚本，便于备份或分享。',
+    exportInfoText:
+      'EXF 内含项目数据与生成的 JavaScript，可用于备份或在其他设备上继续编辑。',
     exportModalTitle: '导出选项',
     codeCopied: '代码已复制到剪贴板。',
     copyFailed: '复制代码失败。'
   },
   // 调试器
   debugger: {
-    source: '源代码',
+    source: '预览环境地址',
     openInNewTab: '在新标签页中打开',
-    copyUrl: '复制URL',
-    urlCopied: 'URL已复制!',
-    extensionUrl: '扩展URL',
-    debuggerNote: '调试器现在直接在新窗口中打开，以进行稳定测试。',
-    lastDraftAutoSave: '上次草稿自动保存',
-    notYet: '尚未',
+    copyUrl: '复制扩展地址',
+    urlCopied: '已复制到剪贴板',
+    extensionUrl: '扩展代码地址（Data URI）',
+    debuggerNote:
+      '下方地址会根据当前生成的 JS 实时更新。在新标签页打开预览环境后，可粘贴该地址加载扩展。',
+    lastDraftAutoSave: '上次自动保存草稿',
+    notYet: '尚无',
     recentFiles: '最近文件',
-    importedExtension: '已导入的扩展'
+    importedExtension: '当前扩展'
   },
   // 消息
   messages: {
@@ -203,6 +207,7 @@ export default {
     CONTROL_IF: '如果 %1 那么 %2 %3',
     CONTROL_ELSEIF: '否则如果',
     CONTROL_ELSE: '否则',
+    CONTROL_THEN: '那么',
     CONTROL_WAIT: '等待 %1 秒',
     CONTROL_WAITFRAME: '等待直到下一帧',
     CONTROL_WAITUNTIL: '等待直到 %1',
@@ -220,6 +225,95 @@ export default {
     ADVANCED_DATETIME: '当前日期和时间',
     ADVANCED_YEAR: '%1 的年份',
     // 通用
-    GENERIC_RETURN: '返回 %1'
+    GENERIC_RETURN: '返回 %1',
+
+    CONTROL_WAIT_ONE_FRAME: '等待 1 帧',
+    CONTROL_MUTATOR_IF: '如果',
+    CONTROL_MUTATOR_ELSEIF: '否则如果',
+    CONTROL_MUTATOR_ELSE: '否则',
+
+    MATH_ADD: '%1 + %2',
+    MATH_SUB: '%1 − %2',
+    MATH_MUL: '%1 × %2',
+    MATH_DIV: '%1 ÷ %2',
+    MATH_POW: '%1 ^ %2',
+    MATH_MOD: '%1 除以 %2 的余数',
+    MATH_LOG: '以 %1 为底 %2 的对数',
+    MATH_TRUE: '真',
+    MATH_FALSE: '假',
+    MATH_RANDOM_BOOL: '随机布尔',
+    MATH_AND: '%1 且 %2',
+    MATH_XOR: '%1 异或 %2',
+    MATH_OR: '%1 或 %2',
+    MATH_NOT: '非 %1',
+    MATH_EQUALS: '%1 = %2',
+    MATH_GTE: '%1 ≥ %2',
+    MATH_GT: '%1 > %2',
+    MATH_LT: '%1 < %2',
+    MATH_LTE: '%1 ≤ %2',
+    MATH_PICK_RANDOM: '在 %1 到 %2 之间随机取值',
+    MATH_FN: '对 %2 应用函数 %1',
+    MATH_CLAMP: '将 %1 限制在 %2 与 %3 之间',
+
+    STRINGS_JOIN_LABEL: '拼接',
+    STRINGS_ITEM_LABEL: '项',
+    STRINGS_EMPTY_STRING: '空字符串',
+    STRINGS_REPEAT: '将 %1 重复 %2 次',
+    STRINGS_SPLIT: '用分隔符 %2 拆分 %1',
+    STRINGS_LENGTH: '%1 的长度',
+    STRINGS_SUBSTRING: '%3 的子串 %1 到 %2',
+    STRINGS_COMPARE: '%1 %2 %3',
+    STRINGS_LOG: '输出日志 %1',
+    STRINGS_AMOUNT: '%2 中 %1 的个数',
+    STRINGS_REPLACE: '将 %2 中的 %1 替换为 %3',
+    STRINGS_TRIM: '去除 %1 两端空白',
+    STRINGS_CASE: '%2 的 %1 大小写',
+    STRINGS_MATCH: '%1 匹配正则 %2 标志 %3',
+
+    LISTS_LIST: '列表',
+    LISTS_ITEM: '项',
+    LISTS_CREATE_EMPTY: '创建空列表',
+    LISTS_CREATE_WITH: '创建列表，项为',
+    LISTS_GET: '列表 %2 的第 %1 项',
+    LISTS_INDEX: '%2 中 %1 的位置',
+    LISTS_CONTAINS: '%1 是否包含 %2',
+    LISTS_SET: '将列表 %2 的第 %1 项设为 %3',
+    LISTS_LENGTH: '%1 的长度',
+    LISTS_JOIN: '用分隔符 %2 连接 %1',
+    LISTS_CONCAT: '将 %1 与 %2 拼接',
+    LISTS_UNIQUE: '%1 去重',
+    LISTS_SORT: '将 %1 排序，模式 %2',
+    LISTS_FILTER: '筛选 %1 中包含 %2 的项',
+    LISTS_FOREACH: '对 %3 逐项 %4 %5：%1 %2',
+    LISTS_FOREACH_INDEX: '索引',
+    LISTS_FOREACH_VALUE: '值',
+
+    INPUTS_KEY_PRESS: '按键 %1 是否按下？',
+    INPUTS_KEYS_PRESSED: '当前按下的键',
+    INPUTS_MOUSE_X: '鼠标 x',
+    INPUTS_MOUSE_Y: '鼠标 y',
+    INPUTS_MOUSE_DOWN: '鼠标按下',
+
+    VECT_CREATE: '向量 x：%1 y：%2',
+    VECT_GET_X: '%1 的 x',
+    VECT_GET_Y: '%1 的 y',
+
+    VAR_SET_TO: '将 %1 设为 %2',
+
+    SCRIPT_EVAL: '执行脚本 %1',
+
+    MUSIC_TONE: '播放音调 %1 赫兹，持续 %2 毫秒',
+    MUSIC_STOP: '停止所有声音',
+    MUSIC_SET_VOLUME: '将音量设为 %1 %%',
+    MUSIC_VOLUME: '当前音量',
+    MUSIC_SET_TEMPO: '将节拍设为每分钟 %1 拍',
+    MUSIC_TEMPO: '节拍（bpm）',
+    MUSIC_NOTE: '演奏音符 %1，时值 %2 拍',
+    MUSIC_REST: '休止 %1 拍',
+
+    EXTRA_LOG: '控制台输出 %1',
+    EXTRA_ALERT: '警告框 %1',
+    EXTRA_PROMPT: '输入框 %1',
+    EXTRA_CONFIRM: '确认框 %1'
   }
 };

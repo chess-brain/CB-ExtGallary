@@ -2,10 +2,10 @@
     import beautify from "js-beautify";
     import Prism from "prismjs";
 
-    export let code;
+    export let code = '';
 
     function formatCode(x) {
-        x = beautify.js(x, {
+        x = beautify.js(x ?? '', {
             indent_size: 4,
             space_in_empty_paren: true,
         });

@@ -6,7 +6,7 @@ const categoryColor = '#c4c';
 
 function register() {
     registerBlock(`${categoryPrefix}tone`, {
-        message0: 'play tone %1 Hz for %2 ms',
+        message0: '%{BKY_MUSIC_TONE}',
         args0: [
             {
                 type: 'input_value',
@@ -30,7 +30,7 @@ function register() {
     });
 
     registerBlock(`${categoryPrefix}stop`, {
-        message0: 'stop all sounds',
+        message0: '%{BKY_MUSIC_STOP}',
         args0: [],
         previousStatement: null,
         nextStatement: null,
@@ -41,7 +41,7 @@ function register() {
     });
 
     registerBlock(`${categoryPrefix}setvolume`, {
-        message0: 'set music volume to %1 %',
+        message0: '%{BKY_MUSIC_SET_VOLUME}',
         args0: [
             {
                 type: 'input_value',
@@ -59,7 +59,7 @@ function register() {
     });
 
     registerBlock(`${categoryPrefix}volume`, {
-        message0: 'music volume',
+        message0: '%{BKY_MUSIC_VOLUME}',
         args0: [],
         output: 'Number',
         inputsInline: true,
@@ -69,7 +69,7 @@ function register() {
     });
 
     registerBlock(`${categoryPrefix}settempo`, {
-        message0: 'set tempo to %1 bpm',
+        message0: '%{BKY_MUSIC_SET_TEMPO}',
         args0: [
             {
                 type: 'input_value',
@@ -87,7 +87,7 @@ function register() {
     });
 
     registerBlock(`${categoryPrefix}tempo`, {
-        message0: 'tempo (bpm)',
+        message0: '%{BKY_MUSIC_TEMPO}',
         args0: [],
         output: 'Number',
         inputsInline: true,
@@ -97,7 +97,7 @@ function register() {
     });
 
     registerBlock(`${categoryPrefix}note`, {
-        message0: 'play note %1 for %2 beats',
+        message0: '%{BKY_MUSIC_NOTE}',
         args0: [
             {
                 type: 'field_input',
@@ -121,7 +121,7 @@ function register() {
     });
 
     registerBlock(`${categoryPrefix}rest`, {
-        message0: 'rest for %1 beats',
+        message0: '%{BKY_MUSIC_REST}',
         args0: [
             {
                 type: 'input_value',

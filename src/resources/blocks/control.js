@@ -49,7 +49,7 @@ function register() {
         return `${code}\n`;
     })
     registerBlock(`${categoryPrefix}if_mutator_if`, {
-        message0: 'if',
+        message0: '%{BKY_CONTROL_MUTATOR_IF}',
         args0: [],
         nextStatement: null,
         inputsInline: true,
@@ -57,7 +57,7 @@ function register() {
         colour: categoryColor,
     }, (block) => {})
     registerBlock(`${categoryPrefix}if_mutator_elseif`, {
-        message0: 'else if',
+        message0: '%{BKY_CONTROL_MUTATOR_ELSEIF}',
         args0: [],
         previousStatement: null,
         nextStatement: null,
@@ -65,7 +65,7 @@ function register() {
         colour: categoryColor,
     }, (block) => {})
     registerBlock(`${categoryPrefix}if_mutator_else`, {
-        message0: 'else',
+        message0: '%{BKY_CONTROL_MUTATOR_ELSE}',
         args0: [],
         previousStatement: null,
         inputsInline: true,
@@ -93,7 +93,7 @@ function register() {
         return `${code}\n`;
     })
     registerBlock(`${categoryPrefix}waitF`, {
-        message0: 'wait 1 frame',
+        message0: '%{BKY_CONTROL_WAIT_ONE_FRAME}',
         args0: [],
         previousStatement: null,
         nextStatement: null,
@@ -366,14 +366,14 @@ function register() {
             for (let i = 1; i <= this.elseifCount_; i++) {
                 this.appendValueInput(`BOOL${i}`)
                     .setCheck('Boolean')
-                    .appendField("else if")
+                    .appendField(Blockly.Msg.CONTROL_ELSEIF || 'else if')
                 this.appendDummyInput(`DUMMY${i}`)
-                    .appendField("then")
+                    .appendField(Blockly.Msg.CONTROL_THEN || 'then')
                 this.appendStatementInput(`BLOCKS${i}`)
             }
             if (this.elseCount_) {
                 this.appendDummyInput('DUMMYELSE')
-                    .appendField("else")
+                    .appendField(Blockly.Msg.CONTROL_ELSE || 'else')
                 this.appendStatementInput('ELSE')
             }
         },

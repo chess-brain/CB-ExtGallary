@@ -32,7 +32,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}set`, {
-        message0: 'set %1 to %2',
+        message0: '%{BKY_VAR_SET_TO}',
         args0: [
             {
                 "type": "field_dropdown",

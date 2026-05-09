@@ -46,6 +46,30 @@ function rebuildUserBlockShape(block, def, mode) {
 
     block.setColour(def.colour || categoryColor);
 
+    // 定义积木：首行合并连续标签为「帽沿」文案，下一行语句槽——接近「当扩展加载时」布局
+    if (mode === 'define') {
+        const fields = def.fields;
+        let i = 0;
+        if (fields.length && fields[0].type === 'label') {
+            const hat = block.appendDummyInput('HAT_LABELS');
+            while (i < fields.length && fields[i].type === 'label') {
+                hat.appendField(fields[i].text || '');
+                i++;
+            }
+        }
+        for (; i < fields.length; i++) {
+            const field = fields[i];
+            if (field.type === 'label') {
+                block.appendDummyInput(`lbl_${field.id || i}`).appendField(field.text || '');
+            } else {
+                const chk = valueCheck(field);
+                block.appendValueInput(field.id).setCheck(chk).appendField(field.text || field.type);
+            }
+        }
+        block.appendStatementInput('BLOCKS');
+        return;
+    }
+
     let row = 0;
     for (const field of def.fields) {
         if (field.type === 'label') {
@@ -55,11 +79,6 @@ function rebuildUserBlockShape(block, def, mode) {
             block.appendValueInput(field.id).setCheck(chk).appendField(field.text || field.type);
         }
         row++;
-    }
-
-    if (mode === 'define') {
-        block.appendStatementInput('BLOCKS');
-        return;
     }
 
     if (def.type === 'command') {

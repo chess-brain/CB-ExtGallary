@@ -46,6 +46,10 @@
     .tab-manager {
         display: flex;
         flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        max-width: 100%;
         height: 100%;
     }
 
@@ -53,6 +57,8 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        gap: 4px;
+        row-gap: 0;
         border-bottom: 1px solid #dee2e6;
         padding: 0 8px;
         background: #f8f9fa;

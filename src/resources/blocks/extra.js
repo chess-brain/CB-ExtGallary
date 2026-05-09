@@ -1,13 +1,12 @@
 import javascriptGenerator from '../javascriptGenerator';
 import { registerBlock } from '../register';
-import Blockly from 'blockly/core';
 
 const categoryPrefix = 'extra_';
 const categoryColor = '#ff9800';
 
 function register() {
     registerBlock(`${categoryPrefix}log`, {
-        message0: 'log %1',
+        message0: '%{BKY_EXTRA_LOG}',
         args0: [
             {
                 "type": "input_value",
@@ -24,7 +23,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}alert`, {
-        message0: 'alert %1',
+        message0: '%{BKY_EXTRA_ALERT}',
         args0: [
             {
                 "type": "input_value",
@@ -41,7 +40,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}prompt`, {
-        message0: 'prompt %1',
+        message0: '%{BKY_EXTRA_PROMPT}',
         args0: [
             {
                 "type": "input_value",
@@ -57,7 +56,7 @@ function register() {
     })
     
     registerBlock(`${categoryPrefix}confirm`, {
-        message0: 'confirm %1',
+        message0: '%{BKY_EXTRA_CONFIRM}',
         args0: [
             {
                 "type": "input_value",

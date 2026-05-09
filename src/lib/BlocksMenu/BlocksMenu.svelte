@@ -3,6 +3,10 @@
     import CreateButton from "./CreateButton.svelte";
     import Blockly from "blockly/core";
     import * as i18n from "../../i18n";
+    import {
+        ensureCustomDefineBlocks,
+        refreshBlocksToolbox,
+    } from "../../resources/customBlocksWorkspace";
     
     // 使用函数包装t，确保每次都获取最新的语言
     function t(key) {
@@ -22,9 +26,11 @@
                 let xml = window.Blockly.Xml.workspaceToDom(workspace);
                 workspace.clear();
                 window.Blockly.Xml.domToWorkspace(xml, workspace);
+                ensureCustomDefineBlocks(workspace);
                 if (workspace.refreshToolboxSelection) {
                     workspace.refreshToolboxSelection();
                 }
+                refreshBlocksToolbox(workspace);
             }
         } catch (e) {
             console.warn("Error updating workspace:", e)
@@ -32,7 +38,7 @@
     }
 
     function createBlock() {
-        if (typeof window === 'undefined' || !window.workspace) return
+        if (typeof window === 'undefined') return
         
         if (!confirm(t('blocksUi.confirmCreate'))) return
 
@@ -49,25 +55,28 @@
             colour: "#4bf"
         }
         window.blocks[id] = block
+        blocks = window.blocks
 
         let workspace = window.workspace
-        /** @type {Blockly.BlockSvg} */
-        let defineBlock = workspace.newBlock("blocks_define")
-        defineBlock.setDeletable(false)
-        defineBlock.blockId_ = id
-        defineBlock.updateShape_()
-        
-        // Only call initSvg and render if workspace is not headless
-        if (typeof window !== 'undefined' && document) {
-            try {
-                defineBlock.initSvg()
-                defineBlock.render()
-            } catch (e) {
-                console.warn("Error initializing block SVG:", e)
+        if (workspace) {
+            /** @type {Blockly.BlockSvg} */
+            let defineBlock = workspace.newBlock("blocks_define")
+            defineBlock.setDeletable(false)
+            defineBlock.blockId_ = id
+            defineBlock.updateShape_()
+            
+            // Only call initSvg and render if workspace is not headless
+            if (typeof document !== 'undefined') {
+                try {
+                    defineBlock.initSvg()
+                    defineBlock.render()
+                } catch (e) {
+                    console.warn("Error initializing block SVG:", e)
+                }
             }
-        }
 
-        updateBlocks()
+            updateBlocks()
+        }
     }
 
     function editBlock(id) {
@@ -83,14 +92,19 @@
         if (!confirm(t('blocksUi.confirmDelete'))) return
 
         delete window.blocks[id]
+        blocks = window.blocks
         
         // Remove the block from workspace
         try {
             let workspace = window.workspace
             if (workspace) {
-                let block = workspace.getBlockById(id)
-                if (block) {
-                    block.dispose()
+                for (const b of workspace.getAllBlocks(false)) {
+                    if (
+                        (b.type === 'blocks_define' || b.type === 'blocks_execute') &&
+                        b.blockId_ === id
+                    ) {
+                        b.dispose(false)
+                    }
                 }
             }
         } catch (e) {

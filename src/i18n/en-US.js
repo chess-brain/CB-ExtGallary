@@ -17,7 +17,7 @@ export default {
   // Tabs
   tabs: {
     editor: 'Editor',
-    display: 'Display',
+    display: 'Properties & Blocks',
     settings: 'Settings',
     debugger: 'Debugger'
   },
@@ -45,7 +45,9 @@ export default {
     export: 'Export',
     darkMode: 'Dark Mode',
     minifyCode: 'Minify Code',
-    includeComments: 'Include Comments'
+    includeComments: 'Include Comments',
+    hideNavLogo: 'Hide top bar logo',
+    navLogoOnNarrow: 'Show logo on narrow screens'
   },
   // Export
   export: {
@@ -66,16 +68,17 @@ export default {
   },
   // Debugger
   debugger: {
-    source: 'Source',
+    source: 'Preview environment URL',
     openInNewTab: 'Open in New Tab',
-    copyUrl: 'Copy URL',
-    urlCopied: 'URL copied!',
-    extensionUrl: 'Extension URL',
-    debuggerNote: 'The debugger now opens directly in a new window for stable testing.',
+    copyUrl: 'Copy extension URL',
+    urlCopied: 'Copied to clipboard',
+    extensionUrl: 'Extension code URL (Data URI)',
+    debuggerNote:
+      'The address below updates live from generated JS. Paste it into the preview environment to load your extension.',
     lastDraftAutoSave: 'Last draft auto-saved',
-    notYet: 'Not yet',
+    notYet: 'None yet',
     recentFiles: 'Recent Files',
-    importedExtension: 'Imported extension'
+    importedExtension: 'Current extension'
   },
   // Messages
   messages: {
@@ -207,6 +210,7 @@ export default {
     CONTROL_IF: 'if %1 then %2 %3',
     CONTROL_ELSEIF: 'else if',
     CONTROL_ELSE: 'else',
+    CONTROL_THEN: 'then',
     CONTROL_WAIT: 'wait %1 seconds',
     CONTROL_WAITFRAME: 'wait until next frame',
     CONTROL_WAITUNTIL: 'wait until %1',
@@ -224,6 +228,95 @@ export default {
     ADVANCED_DATETIME: 'current date and time',
     ADVANCED_YEAR: 'year of %1',
     // Generic
-    GENERIC_RETURN: 'return %1'
+    GENERIC_RETURN: 'return %1',
+
+    CONTROL_WAIT_ONE_FRAME: 'wait 1 frame',
+    CONTROL_MUTATOR_IF: 'if',
+    CONTROL_MUTATOR_ELSEIF: 'else if',
+    CONTROL_MUTATOR_ELSE: 'else',
+
+    MATH_ADD: '%1 + %2',
+    MATH_SUB: '%1 - %2',
+    MATH_MUL: '%1 × %2',
+    MATH_DIV: '%1 ÷ %2',
+    MATH_POW: '%1 ^ %2',
+    MATH_MOD: '%1 % %2',
+    MATH_LOG: 'log %1 %2',
+    MATH_TRUE: 'true',
+    MATH_FALSE: 'false',
+    MATH_RANDOM_BOOL: 'random',
+    MATH_AND: '%1 and %2',
+    MATH_XOR: '%1 xor %2',
+    MATH_OR: '%1 or %2',
+    MATH_NOT: 'not %1',
+    MATH_EQUALS: '%1 = %2',
+    MATH_GTE: '%1 >= %2',
+    MATH_GT: '%1 > %2',
+    MATH_LT: '%1 < %2',
+    MATH_LTE: '%1 <= %2',
+    MATH_PICK_RANDOM: 'pick random %1 to %2',
+    MATH_FN: '%1 of %2',
+    MATH_CLAMP: 'clamp %1 between %2 and %3',
+
+    STRINGS_JOIN_LABEL: 'join',
+    STRINGS_ITEM_LABEL: 'item',
+    STRINGS_EMPTY_STRING: 'empty string',
+    STRINGS_REPEAT: 'repeat %1 %2 times',
+    STRINGS_SPLIT: 'split %1 with delimiter %2',
+    STRINGS_LENGTH: 'length of %1',
+    STRINGS_SUBSTRING: 'substring %1 to %2 of %3',
+    STRINGS_COMPARE: '%1 %2 %3',
+    STRINGS_LOG: 'log %1',
+    STRINGS_AMOUNT: 'amount of %1 in %2',
+    STRINGS_REPLACE: 'replace %1 in %2 with %3',
+    STRINGS_TRIM: 'trim %1',
+    STRINGS_CASE: '%1 case of %2',
+    STRINGS_MATCH: '%1 matches regex %2 flags %3',
+
+    LISTS_LIST: 'list',
+    LISTS_ITEM: 'item',
+    LISTS_CREATE_EMPTY: 'create empty list',
+    LISTS_CREATE_WITH: 'create list with',
+    LISTS_GET: 'get item %1 of %2',
+    LISTS_INDEX: 'index of %1 in %2',
+    LISTS_CONTAINS: '%1 contains %2',
+    LISTS_SET: 'set item %1 of %2 to %3',
+    LISTS_LENGTH: 'length of %1',
+    LISTS_JOIN: 'join %1 with delimiter %2',
+    LISTS_CONCAT: 'concat %1 with %2',
+    LISTS_UNIQUE: 'unique values of %1',
+    LISTS_SORT: 'sort %1 mode %2',
+    LISTS_FILTER: 'filter %1 contains %2',
+    LISTS_FOREACH: 'for each %1 %2 in %3 %4 %5',
+    LISTS_FOREACH_INDEX: 'index',
+    LISTS_FOREACH_VALUE: 'value',
+
+    INPUTS_KEY_PRESS: 'is key %1 pressed?',
+    INPUTS_KEYS_PRESSED: 'keys pressed',
+    INPUTS_MOUSE_X: 'mouse x',
+    INPUTS_MOUSE_Y: 'mouse y',
+    INPUTS_MOUSE_DOWN: 'mouse down',
+
+    VECT_CREATE: 'vector x: %1 y: %2',
+    VECT_GET_X: '%1 x',
+    VECT_GET_Y: '%1 y',
+
+    VAR_SET_TO: 'set %1 to %2',
+
+    SCRIPT_EVAL: 'eval %1',
+
+    MUSIC_TONE: 'play tone %1 Hz for %2 ms',
+    MUSIC_STOP: 'stop all sounds',
+    MUSIC_SET_VOLUME: 'set music volume to %1 %%',
+    MUSIC_VOLUME: 'music volume',
+    MUSIC_SET_TEMPO: 'set tempo to %1 bpm',
+    MUSIC_TEMPO: 'tempo (bpm)',
+    MUSIC_NOTE: 'play note %1 for %2 beats',
+    MUSIC_REST: 'rest for %1 beats',
+
+    EXTRA_LOG: 'log %1',
+    EXTRA_ALERT: 'alert %1',
+    EXTRA_PROMPT: 'prompt %1',
+    EXTRA_CONFIRM: 'confirm %1'
   }
 };

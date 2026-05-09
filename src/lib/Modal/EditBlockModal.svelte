@@ -20,6 +20,10 @@
 
     import BlocklyComponent from "$lib/svelte-blockly";
     import { onMount, onDestroy, tick } from "svelte";
+    import {
+        ensureCustomDefineBlocks,
+        refreshBlocksToolbox,
+    } from "../../resources/customBlocksWorkspace";
     /** @type {Blockly.WorkspaceSvg} */
     let workspace;
 
@@ -64,7 +68,9 @@
             let xml = Blockly.Xml.workspaceToDom(workspaceG);
             workspaceG.clear();
             Blockly.Xml.domToWorkspace(xml, workspaceG);
+            ensureCustomDefineBlocks(workspaceG);
             workspaceG.refreshToolboxSelection?.();
+            refreshBlocksToolbox(workspaceG);
         } catch {}
     }
 

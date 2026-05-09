@@ -7,7 +7,7 @@ const categoryColor = '#9d5';
 
 function register() {
     registerBlock(`${categoryPrefix}evalb`, {
-        message0: 'eval %1',
+        message0: '%{BKY_SCRIPT_EVAL}',
         args0: [
             {
                 "type": "field_input",
@@ -27,7 +27,7 @@ function register() {
         return `${code}\n`;
     })
     registerBlock(`${categoryPrefix}evalv`, {
-        message0: 'eval %1',
+        message0: '%{BKY_SCRIPT_EVAL}',
         args0: [
             {
                 "type": "field_input",

@@ -7,7 +7,7 @@ const categoryColor = '#6cd';
 
 function register() {
     registerBlock(`${categoryPrefix}create`, {
-        message0: 'vector x: %1 y: %2',
+        message0: '%{BKY_VECT_CREATE}',
         args0: [
             {
                 "type": "field_number",
@@ -35,7 +35,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}x`, {
-        message0: '%1 x',
+        message0: '%{BKY_VECT_GET_X}',
         args0: [
             {
                 "type": "input_value",
@@ -53,7 +53,7 @@ function register() {
     })
 
     registerBlock(`${categoryPrefix}y`, {
-        message0: '%1 y',
+        message0: '%{BKY_VECT_GET_Y}',
         args0: [
             {
                 "type": "input_value",

@@ -27,6 +27,10 @@
   import { onMount } from "svelte";
 
   import Compiler from "../resources/compiler";
+  import {
+    ensureCustomDefineBlocks,
+    refreshBlocksToolbox,
+  } from "../resources/customBlocksWorkspace";
 
   import NavigationBar from "$lib/NavigationBar/NavigationBar.svelte";
   import NavigationButton from "$lib/NavigationBar/Button.svelte";
@@ -53,13 +57,23 @@
 
   import BlocksMenu from "$lib/BlocksMenu/BlocksMenu.svelte";
   import "$lib/styles/form-styles.css";
-  import { setLanguage, getLanguage, initLanguage, getAvailableLanguages, addLanguageChangeListener } from "../i18n";
+  import {
+    setLanguage,
+    getLanguage,
+    initLanguage,
+    getAvailableLanguages,
+    addLanguageChangeListener,
+    locale,
+  } from "../i18n";
   import * as i18n from "../i18n";
   import enUSI18n from "../i18n/en-US";
   import zhCNI18n from "../i18n/zh-CN";
-  
-  // 使用函数包装t，确保每次都获取最新的语言
+
+  /** 订阅语言 store，顶部栏/标签页 `{t(...)}` 才能随语言重算（仅靠模块内变量无效） */
+  $: currentLanguage = $locale;
+
   function t(key) {
+    currentLanguage;
     return i18n.t(key);
   }
 
@@ -137,6 +151,10 @@
 
   let localConfig = {
     dark: false,
+    /** 设置中勾选后完全不渲染顶部 Logo */
+    hideNavLogo: false,
+    /** false：窄屏自动隐藏 Logo；true：窄屏仍显示（若未勾选隐藏 Logo） */
+    navLogoOnNarrow: false,
   };
 
   function updateTheme() {
@@ -191,11 +209,16 @@
     registerCategories(workspace);
     registerButtons(workspace);
   }
+
+  /** 从「显示」创建积木后回到编辑器，或加载项目后：补全帽形定义积木并刷新 Blocks 分类工具箱 */
+  $: if (browser && workspace) {
+    ensureCustomDefineBlocks(workspace);
+    refreshBlocksToolbox(workspace);
+  }
   let availableLanguages = [];
   let showLanguageMenu = false;
-  let currentLanguage = getLanguage();
   let compiler = new Compiler();
-  let code;
+  let code = '';
   let blockSearchQuery = "";
   let blockSearchMatches = [];
   let blockSearchIndex = -1;
@@ -283,14 +306,21 @@
     }
   }
 
-  // Expose functions and variables to window for modal access
+  // Expose functions to window for modal access (`window.code` / `window.workspace` 见下方 $: 同步)
   if (typeof window !== 'undefined') {
     // @ts-ignore - Adding custom properties to window
     window.exportAsJS = exportAsJS;
     // @ts-ignore - Adding custom properties to window
     window.exportAsEXF = exportAsEXF;
-    // @ts-ignore - Adding custom properties to window
+  }
+
+  $: if (browser) {
+    // @ts-ignore
     window.code = code;
+  }
+  $: if (browser && workspace) {
+    // @ts-ignore
+    window.workspace = workspace;
   }
 
   function toBase64(value) {
@@ -345,6 +375,8 @@
     window.blocks = projectJson?.blocks ?? {};
 
     Blockly.serialization.workspaces.load(projectJson?.blockly ?? {}, workspace);
+    ensureCustomDefineBlocks(workspace);
+    refreshBlocksToolbox(workspace);
     updateGeneratedCode();
   }
 
@@ -507,9 +539,7 @@
   }
 
   function changeLanguage(langCode) {
-    currentLanguage = langCode;
     setLanguage(langCode);
-    updateBlocklyLanguage(langCode);
     showLanguageMenu = false;
   }
 
@@ -553,13 +583,11 @@
     code = "";
 
     window.Blockly = Blockly;
-    window.workspace = workspace;
     window.variables = {};
     window.blocks = {};
 
-    // Initialize language on client-side
+    // Initialize language on client-side（locale store 与 Blockly.Msg 由下方逻辑同步）
     initLanguage();
-    currentLanguage = getLanguage();
     availableLanguages = getAvailableLanguages();
     
     // Set up Blockly messages for user's preferred language
@@ -587,22 +615,14 @@
 
     // Add language change listener
     const unsubscribe = addLanguageChangeListener((newLang) => {
-      currentLanguage = newLang;
       updateBlocklyLanguage(newLang);
     });
 
     readRecentFiles();
     restoreDraft(true);
     updateGeneratedCode();
-    // @ts-ignore - Adding custom property to window
-    window.code = code;
 
     updateTheme();
-
-    workspace.addChangeListener(event => {
-      //Blockly.Events.disableOrphans(event);
-      updateGeneratedCode();
-    });
 
     addEventListener('beforeunload', event => {
       try {
@@ -615,7 +635,12 @@
 
     let newconfig = localStorage.getItem('localConfig')
     if (newconfig) {
-      localConfig.dark = JSON.parse(newconfig).dark ?? false
+      try {
+        const parsed = JSON.parse(newconfig);
+        localConfig.dark = parsed.dark ?? false;
+        localConfig.hideNavLogo = parsed.hideNavLogo ?? false;
+        localConfig.navLogoOnNarrow = parsed.navLogoOnNarrow ?? false;
+      } catch {}
       updateTheme()
     }
 
@@ -630,7 +655,7 @@
   });
 </script>
 
-<NavigationBar>
+<NavigationBar hideLogo={localConfig.hideNavLogo} showLogoOnNarrow={localConfig.navLogoOnNarrow}>
   <NavigationButton icon={NavIconDark} on:click={() => {
     localConfig.dark = !localConfig.dark;
     updateTheme()
@@ -729,7 +754,12 @@
           </div>
           <div class="editor-main">
             <div class="blockly-container">
-              <BlocklyComponent config={blocklyWorkspaceConfig} locale={currentBlocklyLocale} bind:workspace />
+              <BlocklyComponent
+                config={blocklyWorkspaceConfig}
+                locale={currentBlocklyLocale}
+                bind:workspace
+                on:change={updateGeneratedCode}
+              />
             </div>
             <div class="code">
               <CodePreview {code} />
@@ -772,6 +802,14 @@
                   localConfig.dark = !localConfig.dark;
                   updateTheme();
                 }} />
+              </div>
+              <div class="setting-item">
+                <label for="hide-nav-logo">{t('settings.hideNavLogo')}</label>
+                <input id="hide-nav-logo" type="checkbox" bind:checked={localConfig.hideNavLogo} />
+              </div>
+              <div class="setting-item">
+                <label for="nav-logo-narrow">{t('settings.navLogoOnNarrow')}</label>
+                <input id="nav-logo-narrow" type="checkbox" bind:checked={localConfig.navLogoOnNarrow} disabled={localConfig.hideNavLogo} />
               </div>
             </div>
             <div class="setting-group">
@@ -839,12 +877,21 @@
 <style>
   #main {
     padding-top: 3rem;
-    height: calc(100% - 3rem);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-height: calc(100vh - 3rem);
+    min-height: calc(100dvh - 3rem);
+    height: calc(100dvh - 3rem);
+    display: flex;
+    flex-direction: column;
   }
 
   #editor {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-height: 0;
     height: 100%;
   }
 
@@ -854,32 +901,45 @@
     padding: 0.45rem 0.6rem 0.35rem;
     border-bottom: 1px solid #0001;
     background: #ffffffcf;
+    flex-shrink: 0;
   }
 
   .editor-main {
     display: flex;
+    flex-direction: row;
     flex: 1;
     min-height: 0;
+    width: 100%;
+    max-width: 100%;
+    align-items: stretch;
   }
 
   .blockly-container {
-    width: calc(100vw - 480px);
+    flex: 1 1 55%;
+    min-width: 0;
+    width: auto;
     height: 100%;
   }
 
   .block-search {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.35rem;
+    max-width: min(720px, 100%);
     background: #ffffffdd;
     border: 1px solid #0002;
     border-radius: 0.55rem;
     padding: 0.35rem 0.45rem;
     backdrop-filter: blur(4px);
+    box-sizing: border-box;
   }
 
   .block-search input {
-    width: 300px;
+    flex: 1 1 160px;
+    min-width: 0;
+    width: auto;
+    max-width: 100%;
     border: 1px solid #0002;
     border-radius: 0.4rem;
     padding: 0.25rem 0.4rem;
@@ -909,8 +969,12 @@
   }
 
   .code {
-    width: 480px;
+    flex: 0 1 clamp(260px, 34vw, 480px);
+    width: auto;
+    max-width: min(480px, 100%);
+    min-width: 0;
     height: 100%;
+    min-height: 0;
   }
 
   .display {
@@ -965,7 +1029,10 @@
     padding: 0.25rem 0.45rem;
     background: #fff;
     color: inherit;
-    min-width: 280px;
+    width: min(100%, 420px);
+    max-width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
   }
 
   .debugger-toolbar button {
@@ -1177,17 +1244,37 @@
         color: #fff;
     }
 
+    /* 中等宽度：代码区略窄，避免挤压 Blockly */
     @media (max-width: 1280px) {
-        .blockly-container {
-            width: 100vw;
+        .code {
+            flex: 0 1 clamp(220px, 38vw, 400px);
+            max-width: min(400px, 42%);
+        }
+    }
+
+    /* 窄屏：上下分栏，代码仍可滚动查看 */
+    @media (max-width: 900px) {
+        .editor-main {
+            flex-direction: column;
         }
 
-        .block-search input {
-            width: min(52vw, 280px);
+        .blockly-container {
+            flex: 1 1 52vh;
+            min-height: 200px;
+            width: 100%;
+            height: auto;
         }
 
         .code {
-            display: none;
+            flex: 1 1 min(42vh, 360px);
+            max-width: none;
+            width: 100%;
+            min-height: 160px;
+            border-top: 1px solid #0002;
+        }
+
+        .block-search {
+            max-width: 100%;
         }
 
         .setting-item {
@@ -1200,7 +1287,18 @@
             width: 100%;
             box-sizing: border-box;
         }
+    }
 
+    /* 极窄屏：压缩调试工具栏 */
+    @media (max-width: 520px) {
+        .debugger-toolbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .debugger-toolbar label input {
+            width: 100%;
+        }
     }
 
   /* Language menu styles */
@@ -1214,6 +1312,11 @@
     top: 100%;
     right: 0;
     margin-top: 8px;
+    font-family: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: clamp(0.8125rem, 1.65vw, 0.9375rem);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    -webkit-font-smoothing: antialiased;
     background: white;
     border: 1px solid #dee2e6;
     border-radius: 8px;
