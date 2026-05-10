@@ -4,7 +4,9 @@ const javascriptGenerator = gen.javascriptGenerator
 const oldBlockToCode = javascriptGenerator.blockToCode 
 javascriptGenerator.blockToCode = function(block, opt_thisOnly = false, opt_forceTuple = false) {
     const out = oldBlockToCode.apply(this, [block, opt_thisOnly])
-    if (opt_forceTuple && !Array.isArray(out)) {
+    // Only coerce plain strings to [code, order] for value/output blocks.
+    // Statement blocks must stay strings or statementToCode() throws (e.g. control_wait).
+    if (opt_forceTuple && !Array.isArray(out) && block?.outputConnection) {
         return [out, 0]
     }
     return out

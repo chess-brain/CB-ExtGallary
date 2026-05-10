@@ -8,6 +8,7 @@
  */
 export function ensureCustomDefineBlocks(workspace) {
     if (!workspace || typeof window === 'undefined' || !window.blocks) return;
+    if (workspace.rendered === false) return;
 
     const seen = new Set();
     for (const b of workspace.getAllBlocks(false)) {

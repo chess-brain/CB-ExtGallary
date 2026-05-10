@@ -22,6 +22,8 @@
         //refresh workspace
         try {
             let workspace = window.workspace
+            // Headless Workspace cannot initSvg/render; skip DOM reload.
+            if (workspace && workspace.rendered === false) return
             if (workspace && window.Blockly) {
                 let xml = window.Blockly.Xml.workspaceToDom(workspace);
                 workspace.clear();
@@ -58,7 +60,7 @@
         blocks = window.blocks
 
         let workspace = window.workspace
-        if (workspace) {
+        if (workspace && workspace.rendered !== false) {
             /** @type {Blockly.BlockSvg} */
             let defineBlock = workspace.newBlock("blocks_define")
             defineBlock.setDeletable(false)

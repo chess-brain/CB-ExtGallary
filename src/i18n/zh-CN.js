@@ -297,6 +297,14 @@ export default {
     VECT_CREATE: '向量 x：%1 y：%2',
     VECT_GET_X: '%1 的 x',
     VECT_GET_Y: '%1 的 y',
+    VECT_ADD: '%1 + %2',
+    VECT_SUB: '%1 − %2',
+    VECT_SCALE: '%1 × %2',
+    VECT_LENGTH: '长度 %1',
+    VECT_DISTANCE: '距离 %1 %2',
+    VECT_DOT: '点积 %1 %2',
+    VECT_NORMALIZE: '单位向量 %1',
+    VECT_LERP: '在 %1 与 %2 之间插值 %3',
 
     VAR_SET_TO: '将 %1 设为 %2',
 

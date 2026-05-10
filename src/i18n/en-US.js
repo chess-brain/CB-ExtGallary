@@ -300,6 +300,14 @@ export default {
     VECT_CREATE: 'vector x: %1 y: %2',
     VECT_GET_X: '%1 x',
     VECT_GET_Y: '%1 y',
+    VECT_ADD: '%1 + %2',
+    VECT_SUB: '%1 − %2',
+    VECT_SCALE: '%1 × %2',
+    VECT_LENGTH: 'length %1',
+    VECT_DISTANCE: 'distance %1 %2',
+    VECT_DOT: 'dot product %1 %2',
+    VECT_NORMALIZE: 'normalize %1',
+    VECT_LERP: 'lerp %1 to %2 by %3',
 
     VAR_SET_TO: 'set %1 to %2',
 

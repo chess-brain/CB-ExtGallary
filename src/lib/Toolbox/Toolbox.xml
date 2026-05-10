@@ -91,6 +91,16 @@
     <category name="Vectors" colour="#6cd">
         <block type="vector_create" />
         <sep gap="48"></sep>
+        <block type="vector_add" />
+        <block type="vector_sub" />
+        <block type="vector_scale" />
+        <block type="vector_lerp" />
+        <sep gap="48"></sep>
+        <block type="vector_dot" />
+        <block type="vector_length" />
+        <block type="vector_distance" />
+        <block type="vector_normalize" />
+        <sep gap="48"></sep>
         <block type="vector_x" />
         <block type="vector_y" />
     </category>

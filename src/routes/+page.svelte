@@ -24,7 +24,7 @@
   import TOOLBOX_XML from "$lib/Toolbox/Toolbox.xml?raw";
 
   import BlocklyComponent from "$lib/svelte-blockly";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
 
   import Compiler from "../resources/compiler";
   import {
@@ -202,6 +202,17 @@
   let activeTab = 0;
   let workspace;
 
+  /** 从隐藏态切回积木页后容器尺寸从 0 恢复，需重算 SVG，避免画布异常或块“丢”在视口外 */
+  $: if (browser && activeTab === 0 && workspace) {
+    tick().then(() => {
+      try {
+        Blockly.svgResize(workspace);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+
   /** Flyout/toolbox button callbacks are stored on the workspace; re-register after inject/dispose (e.g. locale refresh). */
   let workspaceFlyoutCallbacksBound = null;
   $: if (browser && workspace && workspace !== workspaceFlyoutCallbacksBound) {
@@ -222,7 +233,7 @@
   let blockSearchQuery = "";
   let blockSearchMatches = [];
   let blockSearchIndex = -1;
-  const DEBUGGER_EDITOR_BASE_URL = "https://editor.02engine.org";
+  const DEBUGGER_EDITOR_BASE_URL = "https://remixwarp.pages.dev/";
   let debuggerExtensionUri = "";
   let copiedExtensionUrl = false;
   let loadError = "";
@@ -720,13 +731,14 @@
   </NavigationButton>
 </NavigationBar>
 <div id="main">
-  <TabManager let:activeTab let:tabs let:handleTabClick let:registerTab activeTab={activeTab}>
+  <TabManager let:activeTab let:tabs let:handleTabClick let:registerTab bind:activeTab>
     <Tab title={t('tabs.editor')} id={0} {activeTab} {handleTabClick} />
     <Tab title={t('tabs.display')} id={1} {activeTab} {handleTabClick} />
     <Tab title={t('tabs.debugger')} id={3} {activeTab} {handleTabClick} />
     
     <svelte:fragment slot="content" let:activeTab>
-      {#if activeTab === 0}
+      <!-- Blockly：勿用 #if 卸载，否则工作区会被 dispose -->
+      <div class="tab-panel" hidden={activeTab !== 0}>
         <div id="editor">
           <div class="editor-search-row">
             <div class="block-search">
@@ -766,7 +778,8 @@
             </div>
           </div>
         </div>
-      {:else if activeTab === 1}
+      </div>
+      <div class="tab-panel" hidden={activeTab !== 1}>
         <div class="display">
           <div class="properties-panel">
             <PropertiesPicker {properties} on:update={updateGeneratedCode} />
@@ -775,7 +788,8 @@
             <BlocksMenu />
           </div>
         </div>
-      {:else if activeTab === 2}
+      </div>
+      <div class="tab-panel" hidden={activeTab !== 2}>
         <div class="settings">
           <h2>{t('settings.general')} {t('tabs.settings')}</h2>
           <div class="settings-panel">
@@ -829,7 +843,8 @@
             </div>
           </div>
         </div>
-      {:else if activeTab === 3}
+      </div>
+      <div class="tab-panel" hidden={activeTab !== 3}>
         <div class="debugger">
           <div class="debugger-toolbar">
             <label>
@@ -864,8 +879,7 @@
             </div>
           {/if}
         </div>
-
-      {/if}
+      </div>
     </svelte:fragment>
   </TabManager>
 </div>
@@ -885,6 +899,22 @@
     height: calc(100dvh - 3rem);
     display: flex;
     flex-direction: column;
+  }
+
+  /* 多标签内容共用 flex 区；非当前标签用 hidden，避免卸载 Blockly */
+  .tab-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .tab-panel[hidden] {
+    display: none !important;
   }
 
   #editor {
